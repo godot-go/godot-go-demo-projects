@@ -1,16 +1,20 @@
 extends CanvasLayer
 
 var player: KinematicBody2D
+var speed: Label
+var position: Label
 
 func _ready():
-	player = get_node("../objects/player")
+	player = $"/root/World/Objects/Player"
 	var err = player.connect("moved", self, "_on_player_moved")
 	if err != OK:
 		print("failure to connect to moved player signal")
+	var stats = $"TopPanel/Margin/Rows/Stats"
+	speed = stats.get_node("Speed")
+	position = stats.get_node("Position")
 
 
 func _on_player_moved(velocity: Vector2) -> void:
-	# $"top/container/speed".text = "SPD: %.2f" % velocity.length()
-	$"top/container/speed".text = "SPD: (%.2f, %.2f)" % [velocity.x, velocity.y]
+	speed.text = "(%.2f, %.2f)" % [velocity.x, velocity.y]
 	var pos = player.position
-	$"top/container/position".text = "POS: (%.2f, %.2f)" % [pos.x, pos.y]
+	position.text = "(%.2f, %.2f)" % [pos.x, pos.y]

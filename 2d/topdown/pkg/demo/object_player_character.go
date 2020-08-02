@@ -23,21 +23,32 @@ func (p *PlayerCharacter) BaseClass() string {
 	return "KinematicBody2D"
 }
 
-func (p *PlayerCharacter) OnClassRegistered(d gdnative.ClassRegisteredEvent) {
-	d.RegisterMethod("X_SetVelocity")
-	d.RegisterMethod("X_Ready")
-	d.RegisterMethod("X_PhysicsProcess")
-	d.RegisterSignal("moved", gdnative.RegisterSignalArg{"velocity", gdnative.GODOT_VARIANT_TYPE_VECTOR2})
+func (p *PlayerCharacter) OnClassRegistered(e gdnative.ClassRegisteredEvent) {
+	e.RegisterMethod("_ready", "Ready")
+	e.RegisterMethod("_physics_process", "PhysicsProcess")
+	e.RegisterSignal("moved", gdnative.RegisterSignalArg{"velocity", gdnative.GODOT_VARIANT_TYPE_VECTOR2})
+
+	defaultValue := gdnative.NewVariantVector2(gdnative.NewVector2(0.0, 0.0))
+	e.RegisterProperty("base/velocity", "SetVelocity", "GetVelocity", defaultValue)
 }
 
-func (h *PlayerCharacter) X_SetVelocity(v gdnative.Vector2) {
+func (h *PlayerCharacter) GetVelocity() gdnative.Variant {
+	return gdnative.NewVariantVector2(h.velocity)
+}
+
+func (h *PlayerCharacter) setVelocity(v gdnative.Vector2) {
 	m := 2 * 5 * 16 * 16
 	n := v.Normalized()
 	h.velocity = n.OperatorMultiplyScalar(float32(m))
 }
 
-func (h *PlayerCharacter) X_Ready() {
-	log.WithFields(gdnative.WithObject(h.GetOwnerObject())).Trace("Start PlayerCharacter::X_Ready")
+func (h *PlayerCharacter) SetVelocity(v gdnative.Variant) {
+	vec2 := v.AsVector2()
+	h.setVelocity(vec2)
+}
+
+func (h *PlayerCharacter) Ready() {
+	log.WithFields(gdnative.WithObject(h.GetOwnerObject())).Trace("Start PlayerCharacter::Ready")
 	strP := gdnative.NewStringFromGoString("sprite/animation_player")
 	p := gdnative.NewNodePath(strP)
 
@@ -80,11 +91,11 @@ func (h *PlayerCharacter) X_Ready() {
 		log.Panic("unable to find idle-up")
 	}
 
-	log.WithFields(gdnative.WithObject(h.GetOwnerObject())).Trace("End PlayerCharacter::X_Ready")
+	log.WithFields(gdnative.WithObject(h.GetOwnerObject())).Trace("End PlayerCharacter::Ready")
 }
 
-func (h *PlayerCharacter) X_PhysicsProcess(delta float64) {
-	h.X_SetVelocity(getKeyInputDirectionAsVector2())
+func (h *PlayerCharacter) PhysicsProcess(delta float64) {
+	h.setVelocity(getKeyInputDirectionAsVector2())
 
 	h.updateSprite(delta)
 
@@ -179,7 +190,7 @@ func (p *PlayerCharacter) Free() {
 	}
 }
 
-func PlayerCharacterCreateFunc(owner *gdnative.GodotObject, typeTag gdnative.TypeTag) gdnative.Class {
+func PlayerCharacterCreateFunc(owner *gdnative.GodotObject, typeTag gdnative.TypeTag) gdnative.NativeScriptClass {
 	log.WithFields(gdnative.WithObject(owner)).Trace("create_func new PlayerCharacter")
 
 	m := (*PlayerCharacter)(gdnative.AllocZeros(int32(unsafe.Sizeof(PlayerCharacter{}))))

@@ -71,8 +71,14 @@ github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+W
 github.com/onsi/ginkgo v1.12.0/go.mod h1:oUhWkIvk5aDxtKvDDuw8gItl8pKl42LzjC9KZE0HfGg=
 github.com/onsi/gomega v1.7.1/go.mod h1:XdKZgCCFLUoM/7CFJVPcG8C1xQ1AJ0vpAezJrB7JYyY=
 github.com/onsi/gomega v1.9.0/go.mod h1:Ho0h+IUsWyvy1OpqCwxlQ/21gkhVunqlU8fDGcoTdcA=
-github.com/pcting/godot-go v0.0.2 h1:sKxd7zGpnB9agXtB3ZTsGLgsXkngzRFkQ3YpjxtZNlY=
-github.com/pcting/godot-go v0.0.2/go.mod h1:8wc1m/3GNwx8rrHWgFO+sd+Ka30TIKNxa+p68yCyops=
+github.com/pcting/godot-go v0.0.3-SNAPSHOT-refsheadsfeatGH20registerproperty h1:HHTLvy4PXqnF/0JiKHDJm9tdnZjpqTaYzYLs95RM2vQ=
+github.com/pcting/godot-go v0.0.3-SNAPSHOT-refsheadsfeatGH20registerproperty/go.mod h1:8wc1m/3GNwx8rrHWgFO+sd+Ka30TIKNxa+p68yCyops=
+github.com/pcting/godot-go v0.0.3-feat-GH-20-register-property h1:VgeSja985Mbq0VgarVdONYRuh6p6p/1s679n3rrbuMo=
+github.com/pcting/godot-go v0.0.3-feat-GH-20-register-property/go.mod h1:8wc1m/3GNwx8rrHWgFO+sd+Ka30TIKNxa+p68yCyops=
+github.com/pcting/godot-go v0.0.3-refsheadsfeatGH20registerproperty h1:Ilu+04pKkfKY2egSRQO1JRQrn0rWNlmLPc/l6oq3Ac0=
+github.com/pcting/godot-go v0.0.3-refsheadsfeatGH20registerproperty/go.mod h1:8wc1m/3GNwx8rrHWgFO+sd+Ka30TIKNxa+p68yCyops=
+github.com/pcting/godot-go v0.0.4-refsheadsfeatGH20registerproperty h1:xFU+OLUuibNsd/+b803OUMk7lgl3qs6fEjjPqPGr+8A=
+github.com/pcting/godot-go v0.0.4-refsheadsfeatGH20registerproperty/go.mod h1:8wc1m/3GNwx8rrHWgFO+sd+Ka30TIKNxa+p68yCyops=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
 github.com/pinzolo/casee v0.0.0-20191019093852-17765ba5eb57 h1:+L+4v944M0gpghDH39uAzZlwe/OrbnpOa7uvZ4LslII=
 github.com/pinzolo/casee v0.0.0-20191019093852-17765ba5eb57/go.mod h1:dNs9tp0e1Tst75lQVHa7QJNLdGOaddO3fdyEMHkMKxQ=

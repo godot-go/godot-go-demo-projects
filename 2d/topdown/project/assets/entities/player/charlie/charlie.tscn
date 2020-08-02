@@ -155,10 +155,6 @@ anims/walk-left = SubResource( 7 )
 anims/walk-right = SubResource( 8 )
 anims/walk-up = SubResource( 9 )
 
-[node name="camera_2d" type="Camera2D" parent="."]
-scale = Vector2( 0.5, 0.5 )
-current = true
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -2 )
 shape = SubResource( 10 )
