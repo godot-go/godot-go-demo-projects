@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "gdb-test",
+            "name": "run",
             "type": "cppdbg",
             "request": "launch",
             "program": "${env:HOME}/bin/godot",
@@ -13,6 +13,7 @@
                 "--verbose",
                 "--debug",
                 "--path",
+                "--editor",
                 "test/project"
             ],
             "stopAtEntry": false,

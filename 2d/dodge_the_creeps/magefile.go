@@ -117,7 +117,7 @@ func runPlugin(appPath string) error {
 			"LOG_LEVEL": "debug",
 			"TEST_USE_GINKGO_WRITER": "1",
 		},
-		godotBin, "--verbose", "--debug",
+		godotBin, "--verbose",
 		"--path", appPath)
 }
 

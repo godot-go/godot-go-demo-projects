@@ -22,13 +22,10 @@ func godot_gdnative_terminate(options unsafe.Pointer) {
 func godot_nativescript_init(handle unsafe.Pointer) {
 	gdnative.GodotNativescriptInit(handle)
 
-	dtc.HUDNativescriptInit()
 	gdnative.RegisterClass(&dtc.HUD{})
 }
 
 //export godot_nativescript_terminate
 func godot_nativescript_terminate(handle unsafe.Pointer) {
-	dtc.HUDNativescriptTerminate()
-
 	gdnative.GodotNativescriptTerminate(handle)
 }
