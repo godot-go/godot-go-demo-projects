@@ -32,7 +32,7 @@ func (p *HUD) Init() {
 func (p *HUD) OnClassRegistered(e gdnative.ClassRegisteredEvent) {
 	// methods
 	e.RegisterMethod("_ready", "Ready")
-	e.RegisterMethod("show_message", "ShowMessage")
+	e.RegisterMethod("show_message", "ShowMessage_")
 	e.RegisterMethod("show_game_over", "ShowGameOver")
 	e.RegisterMethod("show_game_over_yield_message_timer_timeout", "ShowGameOverYieldMessageTimerTimeout")
 	e.RegisterMethod("show_game_over_yield_scene_tree_timer_timeout", "ShowGameOverYieldSceneTreeTimerTimeout")
@@ -51,16 +51,19 @@ func (p *HUD) Ready() {
 	p.scoreLabel = gdnative.NewLabelWithOwner(p.FindNode("ScoreLabel", true, true).GetOwnerObject())
 }
 
-func (p *HUD) ShowMessage(text gdnative.String) {
-	p.messageLabel.SetText(text.AsGoString())
+func (p *HUD) ShowMessage_(text gdnative.String) {
+	p.ShowMessage(text.AsGoString())
+}
+
+// ShowMessage can only be called from Go because of the native string argument
+func (p *HUD) ShowMessage(text string) {
+	p.messageLabel.SetText(text)
 	p.messageLabel.Show()
 	p.messageTimer.Start(-1)
 }
 
 func (p *HUD) ShowGameOver() {
-	strGameOver := gdnative.NewStringFromGoString("Game Over")
-	defer strGameOver.Destroy()
-	p.ShowMessage(strGameOver)
+	p.ShowMessage("Game Over")
 
 	// yield($messageTimer, "timeout")
 	binds := gdnative.NewArray()
@@ -103,5 +106,10 @@ func NewHUD() HUD {
 	log.Debug("NewHUD")
 
 	inst := gdnative.CreateCustomClassInstance("HUD", "CanvasLayer").(*HUD)
+	return *inst
+}
+
+func NewHUDWithOwner(owner *gdnative.GodotObject) HUD {
+	inst := gdnative.GetCustomClassInstanceWithOwner(owner).(*HUD)
 	return *inst
 }
