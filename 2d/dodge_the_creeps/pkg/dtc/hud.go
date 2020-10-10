@@ -45,23 +45,14 @@ func (p *HUD) OnClassRegistered(e gdnative.ClassRegisteredEvent) {
 }
 
 func (p *HUD) Ready() {
-	strMessageLabel := gdnative.NewStringFromGoString("MessageLabel")
-	defer strMessageLabel.Destroy()
-	strMessageTimer := gdnative.NewStringFromGoString("MessageTimer")
-	defer strMessageTimer.Destroy()
-	strStartButton := gdnative.NewStringFromGoString("StartButton")
-	defer strStartButton.Destroy()
-	strScoreLabel := gdnative.NewStringFromGoString("ScoreLabel")
-	defer strScoreLabel.Destroy()
-
-	p.messageLabel = gdnative.NewLabelWithOwner(p.FindNode(strMessageLabel, true, true).GetOwnerObject())
-	p.messageTimer = gdnative.NewTimerWithOwner(p.FindNode(strMessageTimer, true, true).GetOwnerObject())
-	p.startButton = gdnative.NewButtonWithOwner(p.FindNode(strStartButton, true, true).GetOwnerObject())
-	p.scoreLabel = gdnative.NewLabelWithOwner(p.FindNode(strScoreLabel, true, true).GetOwnerObject())
+	p.messageLabel = gdnative.NewLabelWithOwner(p.FindNode("MessageLabel", true, true).GetOwnerObject())
+	p.messageTimer = gdnative.NewTimerWithOwner(p.FindNode("MessageTimer", true, true).GetOwnerObject())
+	p.startButton = gdnative.NewButtonWithOwner(p.FindNode("StartButton", true, true).GetOwnerObject())
+	p.scoreLabel = gdnative.NewLabelWithOwner(p.FindNode("ScoreLabel", true, true).GetOwnerObject())
 }
 
 func (p *HUD) ShowMessage(text gdnative.String) {
-	p.messageLabel.SetText(text)
+	p.messageLabel.SetText(text.AsGoString())
 	p.messageLabel.Show()
 	p.messageTimer.Start(-1)
 }
@@ -74,28 +65,18 @@ func (p *HUD) ShowGameOver() {
 	// yield($messageTimer, "timeout")
 	binds := gdnative.NewArray()
 	defer binds.Destroy()
-	method := gdnative.NewStringFromGoString("show_game_over_yield_message_timer_timeout")
-	defer method.Destroy()
-	strTimeout := gdnative.NewStringFromGoString("timeout")
-	defer strTimeout.Destroy()
-	p.messageTimer.Connect(strTimeout, p, method, binds, int64(gdnative.OBJECT_CONNECT_ONESHOT))
+	p.messageTimer.Connect("timeout", p, "show_game_over_yield_message_timer_timeout", binds, int64(gdnative.OBJECT_CONNECT_ONESHOT))
 }
 
 func (p *HUD) ShowGameOverYieldMessageTimerTimeout() {
-	text := gdnative.NewStringFromGoString("Dodge the\nCreeps")
-	defer text.Destroy()
-	p.messageLabel.SetText(text)
+	p.messageLabel.SetText("Dodge the\nCreeps")
 	p.messageLabel.Show()
 
 	// yield(get_tree().create_timer(1), "timeout")
 	binds := gdnative.NewArray()
 	defer binds.Destroy()
-	method := gdnative.NewStringFromGoString("show_game_over_yield_scene_tree_timer_timeout")
-	defer method.Destroy()
-	strTimeout := gdnative.NewStringFromGoString("timeout")
-	strTimeout.Destroy()
 	p.timer = p.GetTree().CreateTimer(1, true)
-	p.timer.Connect(strTimeout, p, method, binds, int64(gdnative.OBJECT_CONNECT_ONESHOT))
+	p.timer.Connect("timeout", p, "show_game_over_yield_scene_tree_timer_timeout", binds, int64(gdnative.OBJECT_CONNECT_ONESHOT))
 }
 
 func (p *HUD) ShowGameOverYieldSceneTreeTimerTimeout() {
@@ -103,16 +84,12 @@ func (p *HUD) ShowGameOverYieldSceneTreeTimerTimeout() {
 }
 
 func (p *HUD) UpdateScore(score int64) {
-	text := gdnative.NewStringFromGoString(strconv.Itoa(int(score)))
-	defer text.Destroy()
-	p.scoreLabel.SetText(text)
+	p.scoreLabel.SetText(strconv.Itoa(int(score)))
 }
 
 func (p *HUD) OnStartButtonPressed() {
 	p.startButton.Hide()
-	startGame := gdnative.NewStringFromGoString("start_game")
-	defer startGame.Destroy()
-	p.EmitSignal(startGame)
+	p.EmitSignal("start_game")
 }
 
 func (p *HUD) OnMessageTimerTimeout() {
