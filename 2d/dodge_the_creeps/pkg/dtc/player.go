@@ -40,6 +40,7 @@ func (p *Player) OnClassRegistered(e gdnative.ClassRegisteredEvent) {
 	// signals
 	e.RegisterSignal("hit")
 
+	// properties
 	e.RegisterProperty("speed", "SetSpeed", "GetSpeed", gdnative.NewVariantInt(400))
 }
 
@@ -48,7 +49,7 @@ func (p *Player) Ready() {
 	p.collisionShape2D = gdnative.NewCollisionShape2DWithOwner(p.FindNode("CollisionShape2D", true, true).GetOwnerObject())
 	rect := p.GetViewportRect()
 	p.screen_size = rect.GetSize()
-	p.speed = 400
+	// p.speed = 400
 	p.Hide()
 }
 
@@ -95,6 +96,14 @@ func (p *Player) OnPlayerBodyEntered(_body interface{}) {
 	p.Hide()
 	p.EmitSignal("hit")
 	p.collisionShape2D.SetDisabled(true)
+}
+
+func (p *Player) GetSpeed() int64 {
+	return p.speed
+}
+
+func (p *Player) SetSpeed(v int64) {
+	p.speed = v
 }
 
 func clamp(v, min, max float32) float32 {
