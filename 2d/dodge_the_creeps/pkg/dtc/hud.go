@@ -14,7 +14,6 @@ type HUD struct {
 	messageLabel gdnative.Label
 	messageTimer gdnative.Timer
 	startButton gdnative.Button
-	timer gdnative.SceneTreeTimer
 	scoreLabel gdnative.Label
 }
 
@@ -63,6 +62,7 @@ func (p *HUD) ShowMessage(text string) {
 }
 
 func (p *HUD) ShowGameOver() {
+	log.Debug("ShowGameOver")
 	p.ShowMessage("Game Over")
 
 	// yield($messageTimer, "timeout")
@@ -72,14 +72,15 @@ func (p *HUD) ShowGameOver() {
 }
 
 func (p *HUD) ShowGameOverYieldMessageTimerTimeout() {
+	log.Debug("ShowGameOverYieldMessageTimerTimeout")
 	p.messageLabel.SetText("Dodge the\nCreeps")
 	p.messageLabel.Show()
 
 	// yield(get_tree().create_timer(1), "timeout")
 	binds := gdnative.NewArray()
 	defer binds.Destroy()
-	p.timer = p.GetTree().CreateTimer(1, true)
-	p.timer.Connect("timeout", p, "show_game_over_yield_scene_tree_timer_timeout", binds, int64(gdnative.OBJECT_CONNECT_ONESHOT))
+	timer := p.GetTree().CreateTimer(1, true)
+	timer.Connect("timeout", p, "show_game_over_yield_scene_tree_timer_timeout", binds, int64(gdnative.OBJECT_CONNECT_ONESHOT))
 }
 
 func (p *HUD) ShowGameOverYieldSceneTreeTimerTimeout() {

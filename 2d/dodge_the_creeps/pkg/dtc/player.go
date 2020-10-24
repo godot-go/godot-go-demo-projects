@@ -12,7 +12,7 @@ type Player struct {
 	gdnative.UserDataIdentifiableImpl
 
 	position gdnative.Vector2
-	speed int64
+	speed gdnative.Variant
 	screen_size gdnative.Vector2
 
 	animatedSprite gdnative.AnimatedSprite
@@ -53,24 +53,28 @@ func (p *Player) Ready() {
 	p.Hide()
 }
 
-func (p *Player) Process(delta float32) {
-	var velocity = gdnative.NewVector2(0, 0)
+func (p *Player) Process(delta float64) {
 	input := gdnative.GetSingletonInput()
 
-	velocity.SetX(input.GetActionStrength("move_right") - input.GetActionStrength("move_left"))
-	velocity.SetY(input.GetActionStrength("move_down") - input.GetActionStrength("move_up"))
+	x := input.GetActionStrength("move_right") - input.GetActionStrength("move_left")
+	y := input.GetActionStrength("move_down") - input.GetActionStrength("move_up")
+
+	var velocity = gdnative.NewVector2(x, y)
 
 	if velocity.Length() > 0 {
 		v1 := velocity.Normalized()
-		velocity = v1.OperatorMultiplyScalar(float32(p.speed))
+		velocity = v1.OperatorMultiplyScalar(float32(p.speed.AsReal()))
 		p.animatedSprite.Play("", false)
 	} else {
 		p.animatedSprite.Stop()
 	}
-	incrVelocity := velocity.OperatorMultiplyScalar(delta)
-	p.position = p.position.OperatorAdd(incrVelocity)
-	p.position.SetX(clamp(p.position.GetX(), 0, p.screen_size.GetX()))
-	p.position.SetY(clamp(p.position.GetY(), 0, p.screen_size.GetY()))
+
+	pos := p.position.OperatorAdd(velocity.OperatorMultiplyScalar(float32(delta)))
+	pos.SetX(clamp(pos.GetX(), 0, p.screen_size.GetX()))
+	pos.SetY(clamp(pos.GetY(), 0, p.screen_size.GetY()))
+
+	p.SetPosition(pos)
+	p.position = pos
 
 	velX := velocity.GetX()
 	velY := velocity.GetY()
@@ -91,18 +95,17 @@ func (p *Player) Start(pos gdnative.Vector2) {
 	p.collisionShape2D.SetDisabled(false)
 }
 
-
 func (p *Player) OnPlayerBodyEntered(_body interface{}) {
 	p.Hide()
 	p.EmitSignal("hit")
-	p.collisionShape2D.SetDisabled(true)
+	p.collisionShape2D.SetDeferred("disabled", gdnative.NewVariantBool(true))
 }
 
-func (p *Player) GetSpeed() int64 {
+func (p *Player) GetSpeed() gdnative.Variant {
 	return p.speed
 }
 
-func (p *Player) SetSpeed(v int64) {
+func (p *Player) SetSpeed(v gdnative.Variant) {
 	p.speed = v
 }
 
