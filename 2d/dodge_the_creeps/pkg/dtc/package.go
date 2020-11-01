@@ -6,10 +6,8 @@ var (
 	rng gdnative.RandomNumberGenerator
 )
 
-func InitGlobals() {
-	rng = gdnative.NewRandomNumberGenerator()
-}
-
-func DestroyGlobals() {
-	// rng.Destroy()
+func init() {
+	gdnative.RegisterInitCallback(func() {
+		rng = gdnative.NewRandomNumberGenerator()
+	})
 }

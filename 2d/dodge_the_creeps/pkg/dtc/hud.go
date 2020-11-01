@@ -11,7 +11,9 @@ type HUD struct {
 	gdnative.CanvasLayerImpl
 	gdnative.UserDataIdentifiableImpl
 
-	messageLabel gdnative.Label
+	deathCount int
+
+	// messageLabel gdnative.Label
 	messageTimer gdnative.Timer
 	startButton gdnative.Button
 	scoreLabel gdnative.Label
@@ -44,7 +46,6 @@ func (p *HUD) OnClassRegistered(e gdnative.ClassRegisteredEvent) {
 }
 
 func (p *HUD) Ready() {
-	p.messageLabel = gdnative.NewLabelWithOwner(p.FindNode("MessageLabel", true, true).GetOwnerObject())
 	p.messageTimer = gdnative.NewTimerWithOwner(p.FindNode("MessageTimer", true, true).GetOwnerObject())
 	p.startButton = gdnative.NewButtonWithOwner(p.FindNode("StartButton", true, true).GetOwnerObject())
 	p.scoreLabel = gdnative.NewLabelWithOwner(p.FindNode("ScoreLabel", true, true).GetOwnerObject())
@@ -56,8 +57,9 @@ func (p *HUD) ShowMessage_(text gdnative.String) {
 
 // ShowMessage can only be called from Go because of the native string argument
 func (p *HUD) ShowMessage(text string) {
-	p.messageLabel.SetText(text)
-	p.messageLabel.Show()
+	messageLabel := gdnative.NewLabelWithOwner(p.FindNode("MessageLabel", true, true).GetOwnerObject())
+	messageLabel.SetText(text)
+	messageLabel.Show()
 	p.messageTimer.Start(-1)
 }
 
@@ -73,8 +75,9 @@ func (p *HUD) ShowGameOver() {
 
 func (p *HUD) ShowGameOverYieldMessageTimerTimeout() {
 	log.Debug("ShowGameOverYieldMessageTimerTimeout")
-	p.messageLabel.SetText("Dodge the\nCreeps")
-	p.messageLabel.Show()
+	messageLabel := gdnative.NewLabelWithOwner(p.FindNode("MessageLabel", true, true).GetOwnerObject())
+	messageLabel.SetText("Dodge the\nCreeps")
+	messageLabel.Show()
 
 	// yield(get_tree().create_timer(1), "timeout")
 	binds := gdnative.NewArray()
@@ -84,6 +87,7 @@ func (p *HUD) ShowGameOverYieldMessageTimerTimeout() {
 }
 
 func (p *HUD) ShowGameOverYieldSceneTreeTimerTimeout() {
+	log.Debug("ShowGameOverYieldSceneTreeTimerTimeout")
 	p.startButton.Show()
 }
 
@@ -92,12 +96,14 @@ func (p *HUD) UpdateScore(score int64) {
 }
 
 func (p *HUD) OnStartButtonPressed() {
+	log.Debug("OnStartButtonPressed")
 	p.startButton.Hide()
 	p.EmitSignal("start_game")
 }
 
 func (p *HUD) OnMessageTimerTimeout() {
-	p.messageLabel.Hide()
+	messageLabel := gdnative.NewLabelWithOwner(p.FindNode("MessageLabel", true, true).GetOwnerObject())
+	messageLabel.Hide()
 }
 
 func (p *HUD) Free() {
@@ -113,4 +119,10 @@ func NewHUD() HUD {
 func NewHUDWithOwner(owner *gdnative.GodotObject) HUD {
 	inst := gdnative.GetCustomClassInstanceWithOwner(owner).(*HUD)
 	return *inst
+}
+
+func init() {
+	gdnative.RegisterInitCallback(func() {
+		gdnative.RegisterClass(&HUD{})
+	})
 }

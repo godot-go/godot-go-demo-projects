@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://Mob.gd" type="Script" id=1]
+[ext_resource path="res://libs/Mob.gdns" type="Script" id=1]
 [ext_resource path="res://art/enemyFlyingAlt_1.png" type="Texture" id=2]
 [ext_resource path="res://art/enemyFlyingAlt_2.png" type="Texture" id=3]
 [ext_resource path="res://art/enemyWalking_1.png" type="Texture" id=4]
@@ -42,7 +42,6 @@ __meta__ = {
 scale = Vector2( 0.75, 0.75 )
 frames = SubResource( 1 )
 animation = "walk"
-frame = 1
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

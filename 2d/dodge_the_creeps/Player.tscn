@@ -1,6 +1,5 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://art/playerGrey_walk1.png" type="Texture" id=2]
 [ext_resource path="res://art/playerGrey_walk2.png" type="Texture" id=3]
 [ext_resource path="res://art/playerGrey_up1.png" type="Texture" id=4]
@@ -47,7 +46,6 @@ color_ramp = SubResource( 4 )
 
 [node name="Player" type="Area2D"]
 z_index = 10
-script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }

@@ -4,7 +4,6 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/godot-go/godot-go-demo-projects/2d/dodge_the_creeps/pkg/dtc"
 	"github.com/godot-go/godot-go/pkg/gdnative"
 )
 
@@ -21,17 +20,9 @@ func godot_gdnative_terminate(options unsafe.Pointer) {
 //export godot_nativescript_init
 func godot_nativescript_init(handle unsafe.Pointer) {
 	gdnative.GodotNativescriptInit(handle)
-
-	dtc.InitGlobals()
-
-	gdnative.RegisterClass(&dtc.HUD{})
-	// gdnative.RegisterClass(&dtc.Main{})
-	gdnative.RegisterClass(&dtc.Player{})
 }
 
 //export godot_nativescript_terminate
 func godot_nativescript_terminate(handle unsafe.Pointer) {
 	gdnative.GodotNativescriptTerminate(handle)
-
-	dtc.DestroyGlobals()
 }

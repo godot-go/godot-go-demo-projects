@@ -11,12 +11,8 @@ type Player struct {
 	gdnative.Area2DImpl
 	gdnative.UserDataIdentifiableImpl
 
-	position gdnative.Vector2
 	speed gdnative.Variant
-	screen_size gdnative.Vector2
-
-	animatedSprite gdnative.AnimatedSprite
-	collisionShape2D gdnative.CollisionShape2D
+	screenSize gdnative.Vector2
 }
 
 func (p *Player) ClassName() string {
@@ -28,6 +24,7 @@ func (p *Player) BaseClass() string {
 }
 
 func (p *Player) Init() {
+	p.speed = gdnative.NewVariantReal(400.0)
 }
 
 func (p *Player) OnClassRegistered(e gdnative.ClassRegisteredEvent) {
@@ -41,15 +38,15 @@ func (p *Player) OnClassRegistered(e gdnative.ClassRegisteredEvent) {
 	e.RegisterSignal("hit")
 
 	// properties
-	e.RegisterProperty("speed", "SetSpeed", "GetSpeed", gdnative.NewVariantInt(400))
+	e.RegisterProperty("speed", "SetSpeed", "GetSpeed", p.speed)
 }
 
 func (p *Player) Ready() {
-	p.animatedSprite = gdnative.NewAnimatedSpriteWithOwner(p.FindNode("AnimatedSprite", true, true).GetOwnerObject())
-	p.collisionShape2D = gdnative.NewCollisionShape2DWithOwner(p.FindNode("CollisionShape2D", true, true).GetOwnerObject())
 	rect := p.GetViewportRect()
-	p.screen_size = rect.GetSize()
-	// p.speed = 400
+
+	// directly setting the screen_size is fine since this
+	// isn't exposed as a Godot property
+	p.screenSize = rect.GetSize()
 	p.Hide()
 }
 
@@ -61,44 +58,48 @@ func (p *Player) Process(delta float64) {
 
 	var velocity = gdnative.NewVector2(x, y)
 
+	animatedSprite := gdnative.NewAnimatedSpriteWithOwner(p.FindNode("AnimatedSprite", true, true).GetOwnerObject())
+
 	if velocity.Length() > 0 {
 		v1 := velocity.Normalized()
 		velocity = v1.OperatorMultiplyScalar(float32(p.speed.AsReal()))
-		p.animatedSprite.Play("", false)
+		animatedSprite.Play("", false)
 	} else {
-		p.animatedSprite.Stop()
+		animatedSprite.Stop()
 	}
 
-	pos := p.position.OperatorAdd(velocity.OperatorMultiplyScalar(float32(delta)))
-	pos.SetX(clamp(pos.GetX(), 0, p.screen_size.GetX()))
-	pos.SetY(clamp(pos.GetY(), 0, p.screen_size.GetY()))
+	pos := p.GetPosition()
+	newPos := pos.OperatorAdd(velocity.OperatorMultiplyScalar(float32(delta)))
+	newPos.SetX(clamp(newPos.GetX(), 0, p.screenSize.GetX()))
+	newPos.SetY(clamp(newPos.GetY(), 0, p.screenSize.GetY()))
 
-	p.SetPosition(pos)
-	p.position = pos
+	p.SetPosition(newPos)
 
 	velX := velocity.GetX()
 	velY := velocity.GetY()
 
 	if velX != 0 {
-		p.animatedSprite.SetAnimation("right")
-		p.animatedSprite.SetFlipV(false)
-		p.animatedSprite.SetFlipH(velX < 0)
+		animatedSprite.SetAnimation("right")
+		animatedSprite.SetFlipV(false)
+		animatedSprite.SetFlipH(velX < 0)
 	} else if velY != 0 {
-		p.animatedSprite.SetAnimation("up")
-		p.animatedSprite.SetFlipV(velY > 0)
+		animatedSprite.SetAnimation("up")
+		animatedSprite.SetFlipV(velY > 0)
 	}
 }
 
 func (p *Player) Start(pos gdnative.Vector2) {
-	p.position = pos
+	p.SetPosition(pos)
 	p.Show()
-	p.collisionShape2D.SetDisabled(false)
+	collisionShape2D := gdnative.NewCollisionShape2DWithOwner(p.FindNode("CollisionShape2D", true, true).GetOwnerObject())
+	collisionShape2D.SetDisabled(false)
 }
 
 func (p *Player) OnPlayerBodyEntered(_body interface{}) {
 	p.Hide()
 	p.EmitSignal("hit")
-	p.collisionShape2D.SetDeferred("disabled", gdnative.NewVariantBool(true))
+	collisionShape2D := gdnative.NewCollisionShape2DWithOwner(p.FindNode("CollisionShape2D", true, true).GetOwnerObject())
+	collisionShape2D.SetDeferred("disabled", gdnative.NewVariantBool(true))
 }
 
 func (p *Player) GetSpeed() gdnative.Variant {
@@ -106,7 +107,10 @@ func (p *Player) GetSpeed() gdnative.Variant {
 }
 
 func (p *Player) SetSpeed(v gdnative.Variant) {
-	p.speed = v
+	newSpeed := v.AsReal()
+
+	p.speed.Destroy()
+	p.speed = gdnative.NewVariantReal(newSpeed)
 }
 
 func clamp(v, min, max float32) float32 {
@@ -116,4 +120,10 @@ func clamp(v, min, max float32) float32 {
 func NewPlayerWithOwner(owner *gdnative.GodotObject) Player {
 	inst := gdnative.GetCustomClassInstanceWithOwner(owner).(*Player)
 	return *inst
+}
+
+func init() {
+	gdnative.RegisterInitCallback(func() {
+		gdnative.RegisterClass(&Player{})
+	})
 }
