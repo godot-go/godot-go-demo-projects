@@ -59,7 +59,7 @@ func (p *Main) NewGame() {
 	gdnative.NewTimerWithOwner(p.FindNode("StartTimer", true, true).GetOwnerObject()).Start(-1)
 	hud := NewHUDWithOwner(p.FindNode("HUD", true, true).GetOwnerObject())
 	hud.UpdateScore(0)
-	hud.ShowMessage("Get Ready")
+	hud.showMessage("Get Ready")
 	gdnative.NewAudioStreamPlayerWithOwner(p.FindNode("Music", true, true).GetOwnerObject()).Play(0.0)
 }
 

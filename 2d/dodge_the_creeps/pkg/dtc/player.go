@@ -58,7 +58,7 @@ func (p *Player) Process(delta float64) {
 
 	var velocity = gdnative.NewVector2(x, y)
 
-	animatedSprite := gdnative.NewAnimatedSpriteWithOwner(p.FindNode("AnimatedSprite", true, true).GetOwnerObject())
+	animatedSprite := gdnative.NewAnimatedSpriteWithOwner(p.GetNode(gdnative.NewNodePath("AnimatedSprite")).GetOwnerObject())
 
 	if velocity.Length() > 0 {
 		v1 := velocity.Normalized()
@@ -91,14 +91,14 @@ func (p *Player) Process(delta float64) {
 func (p *Player) Start(pos gdnative.Vector2) {
 	p.SetPosition(pos)
 	p.Show()
-	collisionShape2D := gdnative.NewCollisionShape2DWithOwner(p.FindNode("CollisionShape2D", true, true).GetOwnerObject())
+	collisionShape2D := gdnative.NewCollisionShape2DWithOwner(p.GetNode(gdnative.NewNodePath("CollisionShape2D")).GetOwnerObject())
 	collisionShape2D.SetDisabled(false)
 }
 
 func (p *Player) OnPlayerBodyEntered(_body interface{}) {
 	p.Hide()
 	p.EmitSignal("hit")
-	collisionShape2D := gdnative.NewCollisionShape2DWithOwner(p.FindNode("CollisionShape2D", true, true).GetOwnerObject())
+	collisionShape2D := gdnative.NewCollisionShape2DWithOwner(p.GetNode(gdnative.NewNodePath("CollisionShape2D")).GetOwnerObject())
 	collisionShape2D.SetDeferred("disabled", gdnative.NewVariantBool(true))
 }
 

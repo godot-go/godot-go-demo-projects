@@ -34,9 +34,13 @@ anchor_bottom = 0.5
 margin_top = -79.5
 margin_bottom = 79.5
 custom_fonts/font = SubResource( 1 )
+custom_colors/font_outline_modulate = Color( 0.211765, 0.776471, 0, 1 )
 text = "Dodge the
 Creeps"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="StartButton" type="Button" parent="."]
 anchor_left = 0.5
