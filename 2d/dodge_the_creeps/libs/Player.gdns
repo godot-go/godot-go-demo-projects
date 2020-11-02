@@ -1,0 +1,8 @@
+[gd_resource type="NativeScript" load_steps=2 format=2]
+
+[ext_resource path="res://libs/libgodotgo-dodge-the-creeps.gdnlib" type="GDNativeLibrary" id=1]
+
+[resource]
+resource_name = "player"
+class_name = "Player"
+library = ExtResource( 1 )
