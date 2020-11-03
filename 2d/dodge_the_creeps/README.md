@@ -1,14 +1,11 @@
 # Dodge the Creeps
 
-This is a simple game where your character must move
-and avoid the enemies for as long as possible.
+This is a simple game ported from the [godot-demo-projects](https://github.com/godotengine/godot-demo-projects/tree/master/2d/dodge_the_creeps) where your character must move and avoid the enemies for as long as possible.
 
 This is a finished version of the game featured in the
-["Your first game"](https://docs.godotengine.org/en/latest/getting_started/step_by_step/your_first_game.html)
-tutorial in the documentation. For more details,
-consider following the tutorial in the documentation.
+["Your first game"](https://docs.godotengine.org/en/latest/getting_started/step_by_step/your_first_game.html) tutorial in the documentation. For more details, consider following the tutorial in the documentation.
 
-Language: GDScript
+Language: Golang
 
 Renderer: GLES 3 (particles are not available in GLES 2)
 
