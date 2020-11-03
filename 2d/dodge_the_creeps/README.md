@@ -1,5 +1,13 @@
 # Dodge the Creeps
 
+# Quick Start
+
+Run the following to compile and start the app:
+
+```
+go run mage.go -v run
+```
+
 This is a simple game ported from the [godot-demo-projects](https://github.com/godotengine/godot-demo-projects/tree/master/2d/dodge_the_creeps) where your character must move and avoid the enemies for as long as possible.
 
 This is a finished version of the game featured in the
