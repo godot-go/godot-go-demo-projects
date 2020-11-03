@@ -1,16 +1,24 @@
 [general]
 
-singleton=false
-load_once=true
-symbol_prefix="godot_"
-reloadable=false
+singleton = false
+load_once = true
+symbol_prefix = "godot_"
+reloadable = false
 
 [entry]
 
-X11.64="res://libs/libgodotgo-dodge-the-creeps-linux-amd64.so"
+Windows.64 = "res://libs/libgodotgo-dodge-the-creeps-windows-4.0-amd64.dll"
+Windows.32 = "res://libs/libgodotgo-dodge-the-creeps-windows-4.0-386.dll"
+X11.64 = "res://libs/libgodotgo-dodge-the-creeps-linux-amd64.so"
+Server = "res://libs/libgodotgo-dodge-the-creeps-linux-amd64.so"
+OSX.64 = "res://libs/libgodotgo-dodge-the-creeps-darwin-10.6-amd64.dylib"
+iOS.arm64 = "res://libs/libgodotgo-dodge-the-creeps-darwin-10.6-arm64.dylib"
 
 [dependencies]
 
-X11.64=[  ]
-Windows.64=[  ]
-OSX.64=[  ]
+Windows.64 = [  ]
+Windows.32 = [  ]
+X11.64 = [  ]
+Server = [  ]
+OSX.64 = [  ]
+iOS.arm64 = [  ]
