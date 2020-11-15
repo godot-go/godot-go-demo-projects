@@ -37,6 +37,15 @@ func (p *Main) OnClassRegistered(e gdnative.ClassRegisteredEvent) {
 
 func (p *Main) Ready() {
 	rng.Randomize()
+
+	binds := gdnative.NewArray()
+	defer binds.Destroy()
+
+	hud := NewHUDWithOwner(p.FindNode("HUD", true, true).GetOwnerObject())
+	hud.Connect("start_game", p, "new_game", binds, 0)
+
+	player := NewPlayerWithOwner(p.FindNode("Player", true, true).GetOwnerObject())
+	player.Connect("hit", p, "game_over", binds, 0)
 }
 
 func (p *Main) GameOver() {
@@ -50,7 +59,6 @@ func (p *Main) GameOver() {
 	gdnative.NewAudioStreamPlayerWithOwner(p.FindNode("DeathSound", true, true).GetOwnerObject()).Play(0.0)
 }
 
-
 func (p *Main) NewGame() {
 	p.score = 0
 	pos := gdnative.NewPosition2DWithOwner(p.FindNode("StartPosition", true, true).GetOwnerObject()).GetPosition()
@@ -62,7 +70,6 @@ func (p *Main) NewGame() {
 	hud.showMessage("Get Ready")
 	gdnative.NewAudioStreamPlayerWithOwner(p.FindNode("Music", true, true).GetOwnerObject()).Play(0.0)
 }
-
 
 func (p *Main) OnMobTimerTimeout() {
 	mobSpawnLocationNodePath := gdnative.NewNodePath("MobPath/MobSpawnLocation")
@@ -82,11 +89,11 @@ func (p *Main) OnMobTimerTimeout() {
 
 	tau := float32(math.Pi * 2)
 
-	direction := mobSpawnLocation.GetRotation() + tau / 4
+	direction := mobSpawnLocation.GetRotation() + tau/4
 
 	mob.SetPosition(mobSpawnLocation.GetPosition())
 
-	direction += randRange(-tau / 8, tau / 8)
+	direction += randRange(-tau/8, tau/8)
 
 	mob.SetRotation(direction)
 
