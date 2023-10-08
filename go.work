@@ -1,0 +1,6 @@
+go 1.21.2
+
+use (
+	./2d/dodge_the_creeps
+	./2d/topdown
+)
