@@ -1,6 +1,6 @@
 module godot-go-demo-projects/2d/dodgethecreep
 
-go 1.21
+go 1.21.2
 
 require (
 	github.com/godot-go/godot-go v0.0.0-20231008101025-b3123fc31149
