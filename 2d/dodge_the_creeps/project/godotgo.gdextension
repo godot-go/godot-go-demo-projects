@@ -1,0 +1,13 @@
+[configuration]
+
+entry_symbol = "GodotGoDemo2DDodgeTheCreepsInit"
+compatibility_minimum = 4.1
+
+[libraries]
+
+macos.debug = "res://lib/libgodotgo-2ddodgethecreeps-macos-amd64.framework"
+macos.release = "res://lib/libgodotgo-2ddodgethecreeps-macos-amd64.framework"
+windows.debug.x86_64 = "res://lib/libgodotgo-2ddodgethecreeps-windows-amd64.dll"
+windows.release.x86_64 = "res://lib/libgodotgo-2ddodgethecreeps-windows-amd64.dll"
+linux.debug.x86_64 = "res://lib/libgodotgo-2ddodgethecreeps-linux-amd64.so"
+linux.release.x86_64 = "res://lib/libgodotgo-2ddodgethecreeps-linux-amd64.so"
