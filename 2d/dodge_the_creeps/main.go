@@ -24,7 +24,6 @@ func GodotGoDemo2DDodgeTheCreepsInit(p_get_proc_address unsafe.Pointer, p_librar
 	})
 
 	initObj.RegisterSceneTerminator(func() {
-		// demo.PlayerCharacterNativescriptTerminate()
 	})
 
 	return initObj.Init()

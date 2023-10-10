@@ -27,10 +27,6 @@ func RegisterClassHUD() {
 
 type HUD struct {
 	CanvasLayerImpl
-	walkAnimation AnimationPlayer
-	direction     Vector2
-	speed         float32
-	input         Input
 }
 
 func (c *HUD) GetClassName() string {
@@ -140,7 +136,6 @@ func (c *HUD) ShowGameOverAwaitSceneTreeTimerTimeout() {
 	startButton.Show()
 }
 
-
 func (c *HUD) UpdateScore(score Variant) {
 	// $ScoreLabel.text = str(score)
 	scoreLabel := c.getScoreLabel()
@@ -148,7 +143,6 @@ func (c *HUD) UpdateScore(score Variant) {
 	defer gdsScore.Destroy()
 	scoreLabel.SetText(gdsScore)
 }
-
 
 func (c *HUD) V_OnStartButtonPressed() {
 	// $StartButton.hide()

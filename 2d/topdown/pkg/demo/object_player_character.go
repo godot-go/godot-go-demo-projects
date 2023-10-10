@@ -259,7 +259,7 @@ var (
 	idleDown  StringName
 )
 
-func PlayerCharacterNativescriptInit() {
+func PlayerCharacterGDExtensionInit() {
 	moved = NewStringNameWithLatin1Chars("moved")
 	velocity = NewStringNameWithLatin1Chars("velocity")
 	velocityVariant = NewVariantStringName(velocity)
@@ -280,7 +280,7 @@ func PlayerCharacterNativescriptInit() {
 	idleDown = NewStringNameWithLatin1Chars("idle-down")
 }
 
-func PlayerCharacterNativescriptTerminate() {
+func PlayerCharacterGDExtensionTerminate() {
 	moved.Destroy()
 	velocity.Destroy()
 	velocityVariant.Destroy()

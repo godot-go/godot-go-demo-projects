@@ -20,14 +20,12 @@ func GodotGoDemo2DTopDownInit(p_get_proc_address unsafe.Pointer, p_library unsaf
 	)
 
 	initObj.RegisterSceneInitializer(func() {
-		demo.PlayerCharacterNativescriptInit()
-
-
+		demo.PlayerCharacterGDExtensionInit()
 		demo.RegisterClassPlayerCharacter()
 	})
 
 	initObj.RegisterSceneTerminator(func() {
-		demo.PlayerCharacterNativescriptTerminate()
+		demo.PlayerCharacterGDExtensionTerminate()
 	})
 
 	return initObj.Init()
