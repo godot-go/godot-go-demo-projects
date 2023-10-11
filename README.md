@@ -6,6 +6,7 @@ Each demo project is self-contained and you will need to `cd` into their respect
 
 ## Getting Started
 
-you will most likely 
+to run Dodge the Creeps:
 
+    $ cd 2d/dodge_the_creeps
     $ make && make run
