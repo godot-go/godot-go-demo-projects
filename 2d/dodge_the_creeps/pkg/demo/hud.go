@@ -1,14 +1,17 @@
 package demo
 
 import (
-	. "github.com/godot-go/godot-go/pkg/gdextension"
-	. "github.com/godot-go/godot-go/pkg/gdextensionffi"
+	. "github.com/godot-go/godot-go/pkg/builtin"
+	. "github.com/godot-go/godot-go/pkg/constant"
+	. "github.com/godot-go/godot-go/pkg/core"
+	. "github.com/godot-go/godot-go/pkg/ffi"
+	. "github.com/godot-go/godot-go/pkg/gdclassimpl"
 	"github.com/godot-go/godot-go/pkg/log"
 	"go.uber.org/zap"
 )
 
 func RegisterClassHUD() {
-	ClassDBRegisterClass(&HUD{}, []GDExtensionPropertyInfo{}, nil, func(t GDClass) {
+	ClassDBRegisterClass[*HUD](&HUD{}, []GDExtensionPropertyInfo{}, nil, func(t GDClass) {
 		// virtuals
 		ClassDBBindMethodVirtual(t, "V_OnStartButtonPressed", "_on_StartButton_pressed", nil, nil)
 		ClassDBBindMethodVirtual(t, "V_OnMessageTimerTimeout", "_on_MessageTimer_timeout", nil, nil)

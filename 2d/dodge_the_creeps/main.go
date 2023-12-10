@@ -5,18 +5,18 @@ import (
 	"godot-go-demo-projects/2d/dodgethecreep/pkg/demo"
 	"unsafe"
 
-	"github.com/godot-go/godot-go/pkg/gdextension"
-	"github.com/godot-go/godot-go/pkg/gdextensionffi"
+	"github.com/godot-go/godot-go/pkg/core"
+	"github.com/godot-go/godot-go/pkg/ffi"
 	"github.com/godot-go/godot-go/pkg/log"
 )
 
 //export GodotGoDemo2DDodgeTheCreepsInit
 func GodotGoDemo2DDodgeTheCreepsInit(p_get_proc_address unsafe.Pointer, p_library unsafe.Pointer, r_initialization unsafe.Pointer) bool {
 	log.Debug("GodotGoDemo2DDodgeTheCreepsInit called")
-	initObj := gdextension.NewInitObject(
-		(gdextensionffi.GDExtensionInterfaceGetProcAddress)(p_get_proc_address),
-		(gdextensionffi.GDExtensionClassLibraryPtr)(p_library),
-		(*gdextensionffi.GDExtensionInitialization)(unsafe.Pointer(r_initialization)),
+	initObj := core.NewInitObject(
+		(ffi.GDExtensionInterfaceGetProcAddress)(p_get_proc_address),
+		(ffi.GDExtensionClassLibraryPtr)(p_library),
+		(*ffi.GDExtensionInitialization)(unsafe.Pointer(r_initialization)),
 	)
 
 	initObj.RegisterSceneInitializer(func() {
