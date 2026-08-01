@@ -10,8 +10,14 @@ import (
 	"go.uber.org/zap"
 )
 
+func NewHUDFromOwnerObject(owner *GodotObject) GDClass {
+	obj := &HUD{}
+	obj.SetGodotObjectOwner(owner)
+	return obj
+}
+
 func RegisterClassHUD() {
-	ClassDBRegisterClass[*HUD](&HUD{}, []GDExtensionPropertyInfo{}, nil, func(t GDClass) {
+	ClassDBRegisterClass(NewHUDFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *HUD) {
 		// virtuals
 		ClassDBBindMethodVirtual(t, "V_OnStartButtonPressed", "_on_StartButton_pressed", nil, nil)
 		ClassDBBindMethodVirtual(t, "V_OnMessageTimerTimeout", "_on_MessageTimer_timeout", nil, nil)
@@ -101,7 +107,7 @@ func (c *HUD) ShowGameOver() {
 	defer gdnsCallableMethodName.Destroy()
 	callable := NewCallableWithObjectStringName(c, gdnsCallableMethodName)
 	defer callable.Destroy()
-	err := messageTimer.Connect(gdsnTimeout, callable, OBJECT_CONNECT_FLAGS_CONNECT_ONE_SHOT)
+	err := messageTimer.Connect(gdsnTimeout, callable, uint32(OBJECT_CONNECT_FLAGS_CONNECT_ONE_SHOT))
 	if err != OK {
 		log.Panic("message timer connect failure", zap.Any("error", err))
 	}
@@ -126,8 +132,8 @@ func (c *HUD) ShowGameOverAwaitMessageTimerTimeout() {
 	defer gdnsCallableMethodName.Destroy()
 	callable := NewCallableWithObjectStringName(c, gdnsCallableMethodName)
 	defer callable.Destroy()
-	sceneTreeTimer := sceneTreeTimerRef.TypedPtr()
-	err := sceneTreeTimer.Connect(gdsnTimeout, callable, OBJECT_CONNECT_FLAGS_CONNECT_ONE_SHOT)
+	sceneTreeTimer := sceneTreeTimerRef.Ptr()
+	err := sceneTreeTimer.Connect(gdsnTimeout, callable, uint32(OBJECT_CONNECT_FLAGS_CONNECT_ONE_SHOT))
 	if err != OK {
 		log.Panic("message timer connect failure", zap.Any("error", err))
 	}

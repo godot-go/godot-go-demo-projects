@@ -15,8 +15,14 @@ const (
 	TileSize = 16
 )
 
+func NewPlayerCharacterFromOwnerObject(owner *GodotObject) GDClass {
+	obj := &PlayerCharacter{}
+	obj.SetGodotObjectOwner(owner)
+	return obj
+}
+
 func RegisterClassPlayerCharacter() {
-	ClassDBRegisterClass(&PlayerCharacter{}, []GDExtensionPropertyInfo{}, nil, func(t GDClass) {
+	ClassDBRegisterClass(NewPlayerCharacterFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *PlayerCharacter) {
 		// virtuals
 		ClassDBBindMethodVirtual(t, "V_Input", "_input", []string{"event"}, nil)
 		ClassDBBindMethodVirtual(t, "V_Ready", "_ready", nil, nil)
@@ -89,7 +95,7 @@ func (h *PlayerCharacter) SetDirection(v Vector2) {
 }
 
 func (h *PlayerCharacter) V_Input(refInputEvent RefInputEvent) {
-	event := refInputEvent.TypedPtr()
+	event := refInputEvent.Ptr()
 	if event == nil {
 		log.Warn("PlayerCharacter.V_Input: null refEvent parameter")
 		return
