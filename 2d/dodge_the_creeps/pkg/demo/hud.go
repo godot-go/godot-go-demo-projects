@@ -21,6 +21,7 @@ func RegisterClassHUD() {
 		// virtuals
 		ClassDBBindMethodVirtual(t, "V_HUD_OnStartButtonPressed", "_on_StartButton_pressed", nil, nil)
 		ClassDBBindMethodVirtual(t, "V_HUD_OnMessageTimerTimeout", "_on_MessageTimer_timeout", nil, nil)
+		ClassDBBindMethodVirtual(t, "V_HUD_ExitTree", "_exit_tree", nil, nil)
 
 		// properties
 		ClassDBBindMethod(t, "ShowMessage", "show_message", []string{"text"}, nil)
@@ -36,7 +37,9 @@ func RegisterClassHUD() {
 
 type HUD struct {
 	CanvasLayerImpl
-	sceneTreeTimer RefSceneTreeTimer
+	messageTimerConnected   bool
+	sceneTreeTimerRef       RefSceneTreeTimer
+	sceneTreeTimerConnected bool
 }
 
 func UnregisterClassHUD() {
@@ -116,6 +119,7 @@ func (c *HUD) ShowGameOver() {
 	if err != OK {
 		log.Panic("message timer connect failure", zap.Any("error", err))
 	}
+	c.messageTimerConnected = true
 }
 
 func (c *HUD) ShowGameOverAwaitMessageTimerTimeout() {
@@ -131,31 +135,31 @@ func (c *HUD) ShowGameOverAwaitMessageTimerTimeout() {
 	// await get_tree().create_timer(1).timeout
 	tree := c.GetTree()
 	sceneTreeTimerRef := tree.CreateTimer(1, true, false, false)
-	if c.sceneTreeTimer != nil {
-		c.sceneTreeTimer.Unref()
+	if c.sceneTreeTimerConnected {
+		c.sceneTreeTimerRef.Unref()
+		c.sceneTreeTimerConnected = false
 	}
-	c.sceneTreeTimer = sceneTreeTimerRef
 	gdsnTimeout := NewStringNameWithUtf8Chars("timeout")
 	defer gdsnTimeout.Destroy()
 	gdnsCallableMethodName := NewStringNameWithUtf8Chars("show_game_over_await_scene_tree_timer_timeout")
 	defer gdnsCallableMethodName.Destroy()
 	callable := NewCallableWithObjectStringName(c, gdnsCallableMethodName)
 	defer callable.Destroy()
+	c.sceneTreeTimerRef = sceneTreeTimerRef
 	sceneTreeTimer := sceneTreeTimerRef.Ptr()
 	err := sceneTreeTimer.Connect(gdsnTimeout, callable, uint32(OBJECT_CONNECT_FLAGS_CONNECT_ONE_SHOT))
 	if err != OK {
 		log.Panic("message timer connect failure", zap.Any("error", err))
 	}
+	c.sceneTreeTimerConnected = true
 }
 
 func (c *HUD) ShowGameOverAwaitSceneTreeTimerTimeout() {
 	// release the scene tree timer ref held since the message timer timeout
-	if c.sceneTreeTimer != nil {
-		c.sceneTreeTimer.Unref()
-		c.sceneTreeTimer = nil
+	if c.sceneTreeTimerConnected {
+		c.sceneTreeTimerRef.Unref()
+		c.sceneTreeTimerConnected = false
 	}
-
-	// $StartButton.show()
 	startButton := c.getStartButton()
 	startButton.Show()
 }
@@ -180,7 +184,45 @@ func (c *HUD) V_HUD_OnStartButtonPressed() {
 }
 
 func (c *HUD) V_HUD_OnMessageTimerTimeout() {
+	c.messageTimerConnected = false
 	// $MessageLabel.hide()
 	messageLabel := c.getMessageLabel()
 	messageLabel.Hide()
+}
+
+func (c *HUD) Cleanup() {
+	log.Info("HUD.Cleanup, disconnecting remaining signal connections",
+		zap.Bool("messageTimerConnected", c.messageTimerConnected),
+		zap.Bool("sceneTreeTimerConnected", c.sceneTreeTimerConnected))
+	if c.messageTimerConnected {
+		messageTimer := c.getMessageTimer()
+		timeoutSN := NewStringNameWithUtf8Chars("timeout")
+		msgTimerCallableSN := NewStringNameWithUtf8Chars("show_game_over_await_message_timer_timeout")
+		callable := NewCallableWithObjectStringName(c, msgTimerCallableSN)
+		if messageTimer.IsConnected(timeoutSN, callable) {
+			messageTimer.Disconnect(timeoutSN, callable)
+		}
+		callable.Destroy()
+		msgTimerCallableSN.Destroy()
+		timeoutSN.Destroy()
+		c.messageTimerConnected = false
+	}
+	if c.sceneTreeTimerConnected {
+		sceneTreeTimer := c.sceneTreeTimerRef.Ptr()
+		timeoutSN := NewStringNameWithUtf8Chars("timeout")
+		stTimerCallableSN := NewStringNameWithUtf8Chars("show_game_over_await_scene_tree_timer_timeout")
+		callable := NewCallableWithObjectStringName(c, stTimerCallableSN)
+		if sceneTreeTimer.IsConnected(timeoutSN, callable) {
+			sceneTreeTimer.Disconnect(timeoutSN, callable)
+		}
+		callable.Destroy()
+		stTimerCallableSN.Destroy()
+		timeoutSN.Destroy()
+		c.sceneTreeTimerRef.Unref()
+		c.sceneTreeTimerConnected = false
+	}
+}
+
+func (c *HUD) V_HUD_ExitTree() {
+	c.Cleanup()
 }

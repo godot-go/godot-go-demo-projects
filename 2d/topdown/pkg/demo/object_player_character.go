@@ -250,7 +250,7 @@ func (p *PlayerCharacter) Free() {
 }
 
 func NewPlayerCharacter() GDClass {
-	return CreateGDClassInstance2("PlayerCharacter")
+	return CreateGDClassInstance[*PlayerCharacter]()
 }
 
 var (

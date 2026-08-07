@@ -25,6 +25,11 @@ func GodotGoDemo2DDodgeTheCreepsInit(p_get_proc_address unsafe.Pointer, p_librar
 	})
 
 	initObj.RegisterSceneTerminator(func() {
+		for _, inst := range core.Internal.GDClassInstances.Values() {
+			if h, ok := inst.(*demo.HUD); ok {
+				h.Cleanup()
+			}
+		}
 		demo.UnregisterClassHUD()
 		gdclassimpl.DestroyAllCachedClassNames()
 	})
