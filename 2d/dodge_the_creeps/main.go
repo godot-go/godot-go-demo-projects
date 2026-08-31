@@ -7,6 +7,7 @@ import (
 
 	"github.com/godot-go/godot-go/pkg/core"
 	"github.com/godot-go/godot-go/pkg/ffi"
+	"github.com/godot-go/godot-go/pkg/gdclassimpl"
 	"github.com/godot-go/godot-go/pkg/log"
 )
 
@@ -24,6 +25,8 @@ func GodotGoDemo2DDodgeTheCreepsInit(p_get_proc_address unsafe.Pointer, p_librar
 	})
 
 	initObj.RegisterSceneTerminator(func() {
+		demo.UnregisterClassHUD()
+		gdclassimpl.DestroyAllCachedClassNames()
 	})
 
 	return initObj.Init()

@@ -36,6 +36,11 @@ func RegisterClassHUD() {
 
 type HUD struct {
 	CanvasLayerImpl
+	sceneTreeTimer RefSceneTreeTimer
+}
+
+func UnregisterClassHUD() {
+	ClassDBUnregisterClass[*HUD]()
 }
 
 func (c *HUD) GetClassName() string {
@@ -126,6 +131,10 @@ func (c *HUD) ShowGameOverAwaitMessageTimerTimeout() {
 	// await get_tree().create_timer(1).timeout
 	tree := c.GetTree()
 	sceneTreeTimerRef := tree.CreateTimer(1, true, false, false)
+	if c.sceneTreeTimer != nil {
+		c.sceneTreeTimer.Unref()
+	}
+	c.sceneTreeTimer = sceneTreeTimerRef
 	gdsnTimeout := NewStringNameWithUtf8Chars("timeout")
 	defer gdsnTimeout.Destroy()
 	gdnsCallableMethodName := NewStringNameWithUtf8Chars("show_game_over_await_scene_tree_timer_timeout")
@@ -140,6 +149,12 @@ func (c *HUD) ShowGameOverAwaitMessageTimerTimeout() {
 }
 
 func (c *HUD) ShowGameOverAwaitSceneTreeTimerTimeout() {
+	// release the scene tree timer ref held since the message timer timeout
+	if c.sceneTreeTimer != nil {
+		c.sceneTreeTimer.Unref()
+		c.sceneTreeTimer = nil
+	}
+
 	// $StartButton.show()
 	startButton := c.getStartButton()
 	startButton.Show()

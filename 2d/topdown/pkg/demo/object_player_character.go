@@ -52,6 +52,10 @@ type PlayerCharacter struct {
 	input         Input
 }
 
+func UnregisterClassPlayerCharacter() {
+	ClassDBUnregisterClass[*PlayerCharacter]()
+}
+
 func (p *PlayerCharacter) GetClassName() string {
 	return "PlayerCharacter"
 }
@@ -123,7 +127,10 @@ func (h *PlayerCharacter) V_PlayerCharacter_Ready() {
 		log.Panic("unable to get input singleton")
 	}
 	h.speed = 5.0
-	p := NewNodePathWithString(NewStringWithLatin1Chars("sprite/animation_player"))
+	pns := NewStringWithLatin1Chars("sprite/animation_player")
+	defer pns.Destroy()
+	p := NewNodePathWithString(pns)
+	defer p.Destroy()
 	str := p.GetConcatenatedSubnames()
 	defer str.Destroy()
 	log.Info("searching path...", zap.String("names", str.ToUtf8()))
