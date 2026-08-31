@@ -19,8 +19,8 @@ func NewHUDFromOwnerObject(owner *GodotObject) GDClass {
 func RegisterClassHUD() {
 	ClassDBRegisterClass(NewHUDFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *HUD) {
 		// virtuals
-		ClassDBBindMethodVirtual(t, "V_OnStartButtonPressed", "_on_StartButton_pressed", nil, nil)
-		ClassDBBindMethodVirtual(t, "V_OnMessageTimerTimeout", "_on_MessageTimer_timeout", nil, nil)
+		ClassDBBindMethodVirtual(t, "V_HUD_OnStartButtonPressed", "_on_StartButton_pressed", nil, nil)
+		ClassDBBindMethodVirtual(t, "V_HUD_OnMessageTimerTimeout", "_on_MessageTimer_timeout", nil, nil)
 
 		// properties
 		ClassDBBindMethod(t, "ShowMessage", "show_message", []string{"text"}, nil)
@@ -153,7 +153,7 @@ func (c *HUD) UpdateScore(score Variant) {
 	scoreLabel.SetText(gdsScore)
 }
 
-func (c *HUD) V_OnStartButtonPressed() {
+func (c *HUD) V_HUD_OnStartButtonPressed() {
 	// $StartButton.hide()
 	startButton := c.getStartButton()
 	startButton.Hide()
@@ -164,7 +164,7 @@ func (c *HUD) V_OnStartButtonPressed() {
 	c.EmitSignal(gdsnStartGame)
 }
 
-func (c *HUD) V_OnMessageTimerTimeout() {
+func (c *HUD) V_HUD_OnMessageTimerTimeout() {
 	// $MessageLabel.hide()
 	messageLabel := c.getMessageLabel()
 	messageLabel.Hide()

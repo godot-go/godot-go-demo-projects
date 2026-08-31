@@ -24,11 +24,11 @@ func NewPlayerCharacterFromOwnerObject(owner *GodotObject) GDClass {
 func RegisterClassPlayerCharacter() {
 	ClassDBRegisterClass(NewPlayerCharacterFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *PlayerCharacter) {
 		// virtuals
-		ClassDBBindMethodVirtual(t, "V_Input", "_input", []string{"event"}, nil)
-		ClassDBBindMethodVirtual(t, "V_Ready", "_ready", nil, nil)
-		ClassDBBindMethodVirtual(t, "V_PhysicsProcess", "_physics_process", nil, nil)
-		ClassDBBindMethodVirtual(t, "V_Set", "_set", []string{"name", "value"}, nil)
-		ClassDBBindMethodVirtual(t, "V_Get", "_get", []string{"name"}, nil)
+		ClassDBBindMethodVirtual(t, "V_PlayerCharacter_Input", "_input", []string{"event"}, nil)
+		ClassDBBindMethodVirtual(t, "V_PlayerCharacter_Ready", "_ready", nil, nil)
+		ClassDBBindMethodVirtual(t, "V_PlayerCharacter_PhysicsProcess", "_physics_process", nil, nil)
+		ClassDBBindMethodVirtual(t, "V_PlayerCharacter_Set", "_set", []string{"name", "value"}, nil)
+		ClassDBBindMethodVirtual(t, "V_PlayerCharacter_Get", "_get", []string{"name"}, nil)
 
 		// properties
 		ClassDBBindMethod(t, "GetDirection", "get_direction", nil, nil)
@@ -60,13 +60,13 @@ func (p *PlayerCharacter) GetParentClassName() string {
 	return "CharacterBody2D"
 }
 
-func (h *PlayerCharacter) V_Set(name string, value Variant) bool {
+func (h *PlayerCharacter) V_PlayerCharacter_Set(name string, value Variant) bool {
 	switch name {
 	case "direction":
 		h.direction = value.ToVector2()
 		vDir := NewVariantVector2(h.direction)
 		defer vDir.Destroy()
-		log.Info("V_Set",
+		log.Info("V_PlayerCharacter_Set",
 			zap.Any("direction", Stringify(vDir)),
 		)
 		return true
@@ -74,11 +74,11 @@ func (h *PlayerCharacter) V_Set(name string, value Variant) bool {
 	return false
 }
 
-func (h *PlayerCharacter) V_Get(name string) (Variant, bool) {
+func (h *PlayerCharacter) V_PlayerCharacter_Get(name string) (Variant, bool) {
 	switch name {
 	case "direction":
 		vDir := NewVariantVector2(h.direction)
-		log.Info("V_Get",
+		log.Info("V_PlayerCharacter_Get",
 			zap.Any("direction", Stringify(vDir)),
 		)
 		return vDir, true
@@ -94,10 +94,10 @@ func (h *PlayerCharacter) SetDirection(v Vector2) {
 	h.direction = v
 }
 
-func (h *PlayerCharacter) V_Input(refInputEvent RefInputEvent) {
+func (h *PlayerCharacter) V_PlayerCharacter_Input(refInputEvent RefInputEvent) {
 	event := refInputEvent.Ptr()
 	if event == nil {
-		log.Warn("PlayerCharacter.V_Input: null refEvent parameter")
+		log.Warn("PlayerCharacter.V_PlayerCharacter_Input: null refEvent parameter")
 		return
 	}
 
@@ -111,13 +111,13 @@ func (h *PlayerCharacter) V_Input(refInputEvent RefInputEvent) {
 	// }
 	dir := h.input.GetVector(uiLeft, uiRight, uiUp, uiDown, -1.0)
 	vDir := NewVariantVector2(dir)
-	log.Info("V_Input",
+	log.Info("V_PlayerCharacter_Input",
 		zap.Any("dir", Stringify(vDir)),
 	)
 	h.SetDirection(dir)
 }
 
-func (h *PlayerCharacter) V_Ready() {
+func (h *PlayerCharacter) V_PlayerCharacter_Ready() {
 	h.input = GetInputSingleton()
 	if h.input == nil {
 		log.Panic("unable to get input singleton")
@@ -156,7 +156,7 @@ func (h *PlayerCharacter) V_Ready() {
 	}
 }
 
-func (h *PlayerCharacter) V_PhysicsProcess(delta float64) {
+func (h *PlayerCharacter) V_PlayerCharacter_PhysicsProcess(delta float64) {
 	dir := h.direction
 	h.updateSprite(dir)
 	calcV := dir.Multiply_float(float32(delta) * h.speed * TileSize)
@@ -243,7 +243,7 @@ func (p *PlayerCharacter) Free() {
 }
 
 func NewPlayerCharacter() GDClass {
-	return CreateGDClassInstance("PlayerCharacter")
+	return CreateGDClassInstance2("PlayerCharacter")
 }
 
 var (
