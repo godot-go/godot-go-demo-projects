@@ -1,0 +1,75 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="Lobby" type="FallingBlocksLobby"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+custom_minimum_size = Vector2(520, 0)
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Center/VBox"]
+layout_mode = 2
+text = "LOBBY"
+horizontal_alignment = 1
+
+[node name="InfoLabel" type="Label" parent="Center/VBox"]
+layout_mode = 2
+text = "Waiting for players..."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RosterBox" type="VBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+
+[node name="Slot0" type="Label" parent="Center/VBox/RosterBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(520, 26)
+
+[node name="Slot1" type="Label" parent="Center/VBox/RosterBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(520, 26)
+
+[node name="Slot2" type="Label" parent="Center/VBox/RosterBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(520, 26)
+
+[node name="Slot3" type="Label" parent="Center/VBox/RosterBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(520, 26)
+
+[node name="ButtonRow" type="HBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="ReadyButton" type="Button" parent="Center/VBox/ButtonRow"]
+layout_mode = 2
+text = "Ready"
+
+[node name="StartButton" type="Button" parent="Center/VBox/ButtonRow"]
+visible = false
+layout_mode = 2
+text = "Start match"
+
+[node name="LeaveButton" type="Button" parent="Center/VBox/ButtonRow"]
+layout_mode = 2
+text = "Leave"
+
+[node name="HintLabel" type="Label" parent="Center/VBox"]
+layout_mode = 2
+text = "The host can start the match once everyone is ready (2-4 players)."
+horizontal_alignment = 1
+autowrap_mode = 3

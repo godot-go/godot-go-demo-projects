@@ -1,0 +1,97 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="Title" type="FallingBlocksTitle"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+custom_minimum_size = Vector2(520, 0)
+theme_override_constants/separation = 12
+
+[node name="GameTitle" type="Label" parent="Center/VBox"]
+layout_mode = 2
+text = "FALLING BLOCKS
+godot-go multiplayer demo"
+horizontal_alignment = 1
+
+[node name="NameRow" type="HBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="Center/VBox/NameRow"]
+layout_mode = 2
+text = "Name:"
+
+[node name="NameEdit" type="LineEdit" parent="Center/VBox/NameRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Player"
+max_length = 16
+
+[node name="HostRow" type="HBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+
+[node name="HostButton" type="Button" parent="Center/VBox/HostRow"]
+layout_mode = 2
+text = "Host game"
+
+[node name="PortLabel" type="Label" parent="Center/VBox/HostRow"]
+layout_mode = 2
+text = "Port:"
+
+[node name="PortEdit" type="LineEdit" parent="Center/VBox/HostRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(70, 0)
+text = "7777"
+max_length = 5
+alignment = 1
+
+[node name="JoinRow" type="HBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+
+[node name="JoinLabel" type="Label" parent="Center/VBox/JoinRow"]
+layout_mode = 2
+text = "Join host:"
+
+[node name="AddrEdit" type="LineEdit" parent="Center/VBox/JoinRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "localhost"
+placeholder_text = "host address"
+
+[node name="JoinPortEdit" type="LineEdit" parent="Center/VBox/JoinRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(70, 0)
+text = "7777"
+max_length = 5
+alignment = 1
+
+[node name="JoinButton" type="Button" parent="Center/VBox/JoinRow"]
+layout_mode = 2
+text = "Join"
+
+[node name="SoloButton" type="Button" parent="Center/VBox"]
+layout_mode = 2
+text = "Play Solo"
+
+[node name="ErrorLabel" type="Label" parent="Center/VBox"]
+visible = false
+layout_mode = 2
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.45, 0.45, 1)
+
+[node name="HelpLabel" type="Label" parent="Center/VBox"]
+layout_mode = 2
+text = "Controls: A/D or Left/Right move · W/X/Up rotate · Z rotate ccw · S/Down soft drop · Space hard drop · P pause (solo)"
+autowrap_mode = 3

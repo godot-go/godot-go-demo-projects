@@ -1,0 +1,120 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="Match" type="FallingBlocksGame"]
+
+[node name="Gravity" type="Timer" parent="."]
+wait_time = 1.0
+autostart = false
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="BoardFrame" type="Panel" parent="HUD"]
+offset_left = 14.0
+offset_top = 14.0
+offset_right = 346.0
+offset_bottom = 666.0
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+offset_left = 380.0
+offset_top = 20.0
+offset_right = 700.0
+offset_bottom = 44.0
+text = "Score: 0"
+
+[node name="LinesLabel" type="Label" parent="HUD"]
+offset_left = 380.0
+offset_top = 52.0
+offset_right = 700.0
+offset_bottom = 76.0
+text = "Lines: 0"
+
+[node name="LevelLabel" type="Label" parent="HUD"]
+offset_left = 380.0
+offset_top = 84.0
+offset_right = 700.0
+offset_bottom = 108.0
+text = "Level: 1"
+
+[node name="NextLabel" type="Label" parent="HUD"]
+offset_left = 380.0
+offset_top = 116.0
+offset_right = 700.0
+offset_bottom = 140.0
+text = "Next:"
+
+[node name="OppTitle" type="Label" parent="HUD"]
+offset_left = 760.0
+offset_top = 20.0
+offset_right = 1080.0
+offset_bottom = 44.0
+text = "Opponents"
+
+[node name="OppBox" type="VBoxContainer" parent="HUD"]
+offset_left = 760.0
+offset_top = 52.0
+offset_right = 1080.0
+offset_bottom = 200.0
+
+[node name="OppLabel0" type="Label" parent="HUD/OppBox"]
+visible = false
+layout_mode = 2
+
+[node name="OppLabel1" type="Label" parent="HUD/OppBox"]
+visible = false
+layout_mode = 2
+
+[node name="OppLabel2" type="Label" parent="HUD/OppBox"]
+visible = false
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="HUD"]
+offset_left = 380.0
+offset_top = 620.0
+offset_right = 500.0
+offset_bottom = 656.0
+text = "Leave match"
+
+[node name="MessageLabel" type="Label" parent="HUD"]
+visible = false
+offset_left = 20.0
+offset_top = 260.0
+offset_right = 340.0
+offset_bottom = 420.0
+text = "PAUSED"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ResultPanel" type="Panel" parent="HUD"]
+visible = false
+offset_left = 400.0
+offset_top = 220.0
+offset_right = 800.0
+offset_bottom = 460.0
+
+[node name="WinnerLabel" type="Label" parent="HUD/ResultPanel"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 380.0
+offset_bottom = 160.0
+text = "Result"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RematchButton" type="Button" parent="HUD/ResultPanel"]
+visible = false
+layout_mode = 0
+offset_left = 30.0
+offset_top = 170.0
+offset_right = 170.0
+offset_bottom = 206.0
+text = "Rematch"
+
+[node name="PlayAgainButton" type="Button" parent="HUD/ResultPanel"]
+visible = false
+layout_mode = 0
+offset_left = 30.0
+offset_top = 170.0
+offset_right = 170.0
+offset_bottom = 206.0
+text = "Play again"
