@@ -29,6 +29,11 @@ func NewFallingBlocksLobbyFromOwnerObject(owner *GodotObject) GDClass {
 	return obj
 }
 
+// UnregisterClassFallingBlocksLobby unregisters the lobby root class.
+func UnregisterClassFallingBlocksLobby() {
+	ClassDBUnregisterClass[*FallingBlocksLobby]()
+}
+
 // FallingBlocksLobby is the root of Lobby.tscn.
 type FallingBlocksLobby struct {
 	ControlImpl

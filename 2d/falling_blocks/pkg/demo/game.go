@@ -69,6 +69,11 @@ func NewFallingBlocksGameFromOwnerObject(owner *GodotObject) GDClass {
 	return obj
 }
 
+// UnregisterClassFallingBlocksGame unregisters the match root class.
+func UnregisterClassFallingBlocksGame() {
+	ClassDBUnregisterClass[*FallingBlocksGame]()
+}
+
 // FallingBlocksGame is the root of Match.tscn: renders the board, drives gravity,
 // reads input, and exchanges versus state through the Session.
 type FallingBlocksGame struct {

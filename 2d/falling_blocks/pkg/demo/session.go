@@ -2,6 +2,7 @@ package demo
 
 import (
 	"encoding/json"
+	"runtime"
 	"sort"
 	"time"
 	"unsafe"
@@ -142,6 +143,11 @@ func NewFallingBlocksSessionFromOwnerObject(owner *GodotObject) GDClass {
 	return obj
 }
 
+// UnregisterClassFallingBlocksSession unregisters the autoloaded session node class.
+func UnregisterClassFallingBlocksSession() {
+	ClassDBUnregisterClass[*FallingBlocksSession]()
+}
+
 // FallingBlocksSession is the autoloaded, scene-independent networking hub.
 // It owns the multiplayer peer, the roster state, and every RPC endpoint.
 type FallingBlocksSession struct {
@@ -213,6 +219,7 @@ func (c *FallingBlocksSession) rpcModeFor(method string, mode int64) {
 
 func (c *FallingBlocksSession) connectNetSignals() {
 	mp := c.GetMultiplayer()
+	defer mp.Unref()
 	if !mp.IsValid() {
 		log.Warn("FallingBlocksSession: no multiplayer api at ready")
 		return
@@ -248,11 +255,15 @@ func (c *FallingBlocksSession) Host(port Variant) Variant {
 	peer, ref := newENetPeer()
 	err := peer.CreateServer(p, 16, 0, 0, 0)
 	if err != OK {
-		ref.Unref()
+		releaseOwnedPeer(ref)
 		log.Info("FallingBlocksSession.Host: create_server failed", zap.Any("error", err))
 		return NewVariantInt(int(JoinHostBusy))
 	}
-	c.attachPeer(ref)
+	if !c.attachPeer(ref) {
+		releaseOwnedPeer(ref)
+		log.Warn("FallingBlocksSession.Host: could not attach peer to multiplayer api")
+		return NewVariantInt(int(JoinHostBusy))
+	}
 	c.isHost = true
 	c.active = true
 	c.solo = false
@@ -273,11 +284,15 @@ func (c *FallingBlocksSession) Join(address Variant, port Variant) Variant {
 	peer, ref := newENetPeer()
 	err := peer.CreateClient(addr, int32(port.ToInt()), 0, 0, 0, 0)
 	if err != OK {
-		ref.Unref()
+		releaseOwnedPeer(ref)
 		c.joinState = JoinFailed
 		return NewVariantInt(int(JoinFailed))
 	}
-	c.attachPeer(ref)
+	if !c.attachPeer(ref) {
+		releaseOwnedPeer(ref)
+		c.joinState = JoinFailed
+		return NewVariantInt(int(JoinFailed))
+	}
 	c.isHost = false
 	c.active = true
 	c.solo = false
@@ -310,33 +325,81 @@ func (c *FallingBlocksSession) Solo() {
 	c.matchToken = 1
 }
 
+// cleanupPeer shuts down the session's multiplayer peer. The peer must already
+// have been handed to the multiplayer API via attachPeer: the engine's
+// set_multiplayer_peer(ptrcall) conversion adopts the construct-time refcount
+// through RefCounted::init_ref, so the remaining +1 belongs to the API member,
+// NOT to our Go wrapper. Unreffing here would drop the engine's own reference
+// (godot-go ignores the `die` flag, leaving an unfreed zombie that later
+// underflows when SceneMultiplayer releases it). We only close the connection;
+// the engine frees the peer when the API replaces it or is destroyed.
 func (c *FallingBlocksSession) cleanupPeer() {
 	if c.peer != nil {
 		c.peer.Ptr().Close()
-		c.peer.Unref()
 	}
 	c.peer = nil
 }
 
-func (c *FallingBlocksSession) attachPeer(ref RefENetMultiplayerPeer) {
-	c.peer = ref
-	mp := c.GetMultiplayer()
-	if !mp.IsValid() {
-		return
+// releaseOwnedPeer drops the sole ownership reference of a freshly constructed
+// peer and destroys the instance if the engine refcount hit zero. godot-go's
+// RefBase.Unref ignores the refcount's `die` flag, so releasing the last
+// wrapper-held reference would otherwise leave an unfreed ObjectDB zombie.
+func releaseOwnedPeer(ref RefENetMultiplayerPeer) {
+	ptr := ref.Ptr()
+	if ptr.Unreference() {
+		CallFunc_GDExtensionInterfaceObjectDestroy(
+			(GDExtensionObjectPtr)(unsafe.Pointer(ptr.GetGodotObjectOwner())),
+		)
 	}
-	// MultiplayerAPI.SetMultiplayerPeer cannot be used here: godot-go v0.3.40
-	// encodes Ref<> interface arguments as &iface for ptrcall, which the engine
-	// dereferences as garbage. Route through Object.Call with an OBJECT variant.
+}
+
+// attachPeer hands a constructed peer to the multiplayer API. The engine's
+// set_multiplayer_peer conversion (Ref(T*) -> RefCounted::init_ref) adopts the
+// construct-time refcount: on success the single remaining +1 is owned by the
+// API, NOT by our wrapper, so the wrapper must never Unref it (see
+// cleanupPeer). attachPeer returns false only if the API/method cannot be
+// resolved; callers must releaseOwnedPeer the ref in that case.
+//
+// v0.3.40's generated SetMultiplayerPeer cannot be used: it encodes the Ref<>
+// argument as the address of a Go interface header, which the engine
+// dereferences as garbage. The documented GDExtension ptrcall convention for
+// Ref<T> parameters is the address of an Object* slot, matching
+// PtrToArg<Ref<T>>::convert (method_ptrcall.h).
+func (c *FallingBlocksSession) attachPeer(ref RefENetMultiplayerPeer) bool {
+	mp := c.GetMultiplayer()
+	defer mp.Unref()
+	if !mp.IsValid() {
+		return false
+	}
 	api := mp.Ptr()
-	vpeer := NewVariantGodotObject(ref.Ptr().GetGodotObjectOwner())
-	defer vpeer.Destroy()
-	gdsn := NewStringNameWithLatin1Chars("set_multiplayer_peer")
-	defer gdsn.Destroy()
-	api.Call(gdsn, vpeer)
+	self := (GDExtensionObjectPtr)(unsafe.Pointer(api.GetGodotObjectOwner()))
+	slot := (GDExtensionObjectPtr)(unsafe.Pointer(ref.Ptr().GetGodotObjectOwner()))
+	arg := (GDExtensionConstTypePtr)(unsafe.Pointer(&slot))
+	var pinner runtime.Pinner
+	defer pinner.Unpin()
+	pinner.Pin(&slot)
+	pinner.Pin(&arg)
+	cls := NewStringNameWithLatin1Chars("MultiplayerAPI")
+	defer cls.Destroy()
+	mtd := NewStringNameWithLatin1Chars("set_multiplayer_peer")
+	defer mtd.Destroy()
+	fn := CallFunc_GDExtensionInterfaceClassdbGetMethodBind(
+		cls.AsGDExtensionConstStringNamePtr(),
+		mtd.AsGDExtensionConstStringNamePtr(),
+		3694835298,
+	)
+	if fn == nil {
+		log.Warn("FallingBlocksSession.attachPeer: could not resolve set_multiplayer_peer")
+		return false
+	}
+	CallFunc_GDExtensionInterfaceObjectMethodBindPtrcall(fn, self, &arg, (GDExtensionTypePtr)(nil))
+	c.peer = ref
+	return true
 }
 
 func (c *FallingBlocksSession) selfID() int32 {
 	mp := c.GetMultiplayer()
+	defer mp.Unref()
 	if !mp.IsValid() {
 		return 1
 	}
@@ -456,6 +519,7 @@ func (c *FallingBlocksSession) ReportGameOver() {
 
 func (c *FallingBlocksSession) senderId() int32 {
 	mp := c.GetMultiplayer()
+	defer mp.Unref()
 	if !mp.IsValid() {
 		return c.selfID()
 	}

@@ -30,6 +30,11 @@ func NewFallingBlocksTitleFromOwnerObject(owner *GodotObject) GDClass {
 	return obj
 }
 
+// UnregisterClassFallingBlocksTitle unregisters the title-screen root class.
+func UnregisterClassFallingBlocksTitle() {
+	ClassDBUnregisterClass[*FallingBlocksTitle]()
+}
+
 // FallingBlocksTitle is the root of Main.tscn.
 type FallingBlocksTitle struct {
 	ControlImpl
