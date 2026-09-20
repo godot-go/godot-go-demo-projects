@@ -3,7 +3,7 @@ module godot-go-demo-projects/2d/dodgethecreep
 go 1.27.0
 
 require (
-	github.com/godot-go/godot-go v0.3.40
+	github.com/godot-go/godot-go v0.3.41
 	go.uber.org/zap v1.24.0
 )
 

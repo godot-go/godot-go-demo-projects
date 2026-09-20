@@ -2,8 +2,8 @@ github.com/CannibalVox/cgoalloc v1.2.1 h1:5UKpiIRk5rHEO3vNBrCgi8x36K9hUET4Piyyhj
 github.com/CannibalVox/cgoalloc v1.2.1/go.mod h1:/O2DJI63phdTMjYasQIv7ib3XAi29LEM6BXS+plQJic=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/godot-go/godot-go v0.3.40 h1:5nQzPjdpy4NO1sBl4IDKU8IHz/bVnh/qSetoKAvDt+I=
-github.com/godot-go/godot-go v0.3.40/go.mod h1:Edgj7w3csni1xYO+75a7VFnsqfVpKOakfvRqXDMIMkE=
+github.com/godot-go/godot-go v0.3.41 h1:VTlmauVDTv1jGL9mqVqa9MZvCN4yvVqQ/dRXXo7+O2Q=
+github.com/godot-go/godot-go v0.3.41/go.mod h1:Edgj7w3csni1xYO+75a7VFnsqfVpKOakfvRqXDMIMkE=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKsk=
