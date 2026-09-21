@@ -390,14 +390,30 @@ func (c *FallingBlocksGame) OnPlayAgain() {
 	c.startNewGame()
 }
 
+// drawFilledRect paints a solid axis-aligned rectangle. It uses
+// draw_colored_polygon rather than draw_rect because godot-go v0.3.43
+// mis-marshals draw_rect's filled/width arguments against Godot 4.8,
+// emitting a spurious "width has no effect when filled" warning on every
+// call (which floods stdout and stalls the main thread).
+func drawFilledRect(c *FallingBlocksGame, x, y, w, h float32, col Color) {
+	pts := NewPackedVector2Array()
+	defer pts.Destroy()
+	pts.Append(NewVector2WithFloat32Float32(x, y))
+	pts.Append(NewVector2WithFloat32Float32(x+w, y))
+	pts.Append(NewVector2WithFloat32Float32(x+w, y+h))
+	pts.Append(NewVector2WithFloat32Float32(x, y+h))
+	uvs := NewPackedVector2Array()
+	defer uvs.Destroy()
+	c.DrawColoredPolygon(pts, col, uvs, RefTexture2D(nil))
+}
+
 func (c *FallingBlocksGame) V_FallingBlocksGame_Draw() {
 	if c.g == nil {
 		return
 	}
 	b := c.g.Board
 	bg := NewColorWithFloat32Float32Float32(0.08, 0.08, 0.1)
-	outer := NewRect2WithFloat32Float32Float32Float32(boardX, boardY, float32(b.W)*cellSize, float32(b.H-b.Buffer)*cellSize)
-	c.DrawRect(outer, bg, true, 1, false)
+	drawFilledRect(c, boardX, boardY, float32(b.W)*cellSize, float32(b.H-b.Buffer)*cellSize, bg)
 
 	for y := b.Buffer; y < b.H; y++ {
 		for x := 0; x < b.W; x++ {
@@ -421,10 +437,9 @@ func (c *FallingBlocksGame) drawGhost() {
 	col := NewColorWithFloat32Float32Float32(0.28, 0.28, 0.32)
 	for _, cell := range c.g.GhostCells() {
 		if cell.Y >= c.g.Board.Buffer {
-			rect := NewRect2WithFloat32Float32Float32Float32(
+			drawFilledRect(c,
 				boardX+float32(cell.X)*cellSize+1, boardY+float32(cell.Y-c.g.Board.Buffer)*cellSize+1,
-				cellSize-2, cellSize-2)
-			c.DrawRect(rect, col, true, 1, false)
+				cellSize-2, cellSize-2, col)
 		}
 	}
 }
@@ -449,11 +464,10 @@ func (c *FallingBlocksGame) drawPreview() {
 	col := NewColorWithFloat32Float32Float32(
 		kindColors[next][0], kindColors[next][1], kindColors[next][2])
 	for _, cell := range cells {
-		rect := NewRect2WithFloat32Float32Float32Float32(
+		drawFilledRect(c,
 			previewX+float32(cell.X-minX)*previewCell+1,
 			previewY+float32(cell.Y-minY)*previewCell+1,
-			previewCell-2, previewCell-2)
-		c.DrawRect(rect, col, true, 1, false)
+			previewCell-2, previewCell-2, col)
 	}
 }
 
@@ -462,8 +476,7 @@ func (c *FallingBlocksGame) fillRect(x, y int, rgb ...float32) {
 	if len(rgb) >= 3 {
 		col = NewColorWithFloat32Float32Float32(rgb[0], rgb[1], rgb[2])
 	}
-	rect := NewRect2WithFloat32Float32Float32Float32(
+	drawFilledRect(c,
 		boardX+float32(x)*cellSize+1, boardY+float32(y-c.g.Board.Buffer)*cellSize+1,
-		cellSize-2, cellSize-2)
-	c.DrawRect(rect, col, true, 1, false)
+		cellSize-2, cellSize-2, col)
 }
