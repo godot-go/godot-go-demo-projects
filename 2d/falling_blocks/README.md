@@ -84,3 +84,7 @@ Automation env vars (development only):
 ```sh
 go test ./pkg/falling_blocks/   # game core: rules, scoring, kicks, garbage
 ```
+
+## Credits
+
+`project/art/House In a Forest Loop.ogg` Copyright &copy; 2012 [HorrorPen](https://opengameart.org/users/horrorpen), [CC-BY 3.0: Attribution](http://creativecommons.org/licenses/by/3.0/). Source: https://opengameart.org/content/loop-house-in-a-forest
