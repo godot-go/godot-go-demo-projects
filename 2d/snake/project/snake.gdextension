@@ -1,0 +1,13 @@
+[configuration]
+
+entry_symbol = "GodotGoDemo2DSnakeInit"
+compatibility_minimum = 4.1
+
+[libraries]
+
+macos.debug = "res://lib/libgodotgo-2dsnake-macos-amd64.framework"
+macos.release = "res://lib/libgodotgo-2dsnake-macos-amd64.framework"
+windows.debug.x86_64 = "res://lib/libgodotgo-2dsnake-windows-amd64.dll"
+windows.release.x86_64 = "res://lib/libgodotgo-2dsnake-windows-amd64.dll"
+linux.debug.x86_64 = "res://lib/libgodotgo-2dsnake-linux-amd64.so"
+linux.release.x86_64 = "res://lib/libgodotgo-2dsnake-linux-amd64.so"

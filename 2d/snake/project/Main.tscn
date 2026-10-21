@@ -1,0 +1,44 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="Snake" type="SnakeGame"]
+
+[node name="Step" type="Timer" parent="."]
+wait_time = 0.166666666666667
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="ProgressLabel" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 18.0
+offset_right = 320.0
+offset_bottom = 54.0
+theme_override_font_sizes/font_size = 26
+text = "Pellets: 0 / 20"
+
+[node name="HelpLabel" type="Label" parent="HUD"]
+offset_left = 300.0
+offset_top = 22.0
+offset_right = 624.0
+offset_bottom = 52.0
+theme_override_font_sizes/font_size = 16
+text = "WASD / arrows steer  -  P pause"
+horizontal_alignment = 2
+
+[node name="MessageLabel" type="Label" parent="HUD"]
+visible = false
+offset_left = 0.0
+offset_top = 80.0
+offset_right = 640.0
+offset_bottom = 560.0
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartLabel" type="Label" parent="HUD"]
+offset_left = 0.0
+offset_top = 150.0
+offset_right = 640.0
+offset_bottom = 204.0
+theme_override_font_sizes/font_size = 34
+text = "PRESS ANY KEY TO START"
+horizontal_alignment = 1
