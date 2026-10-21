@@ -3,7 +3,7 @@ module godot-go-demo-projects/2d/topdown
 go 1.27.0
 
 require (
-	github.com/godot-go/godot-go v0.3.43
+	github.com/godot-go/godot-go v0.3.65
 	go.uber.org/zap v1.24.0
 )
 

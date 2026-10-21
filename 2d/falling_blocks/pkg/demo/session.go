@@ -91,7 +91,7 @@ func (r *Roster) cloneVariant() Variant {
 
 // RegisterClassFallingBlocksSession registers the autoloaded session node class.
 func RegisterClassFallingBlocksSession() {
-	ClassDBRegisterClass(NewFallingBlocksSessionFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *FallingBlocksSession) {
+	ClassDBRegisterClass(NewFallingBlocksSessionFromOwnerObject, []PropertyDescriptor{}, nil, func(t *FallingBlocksSession) {
 		ClassDBBindMethodVirtual(t, "V_FallingBlocksSession_Ready", "_ready", nil, nil)
 		ClassDBBindMethodVirtual(t, "V_FallingBlocksSession_ExitTree", "_exit_tree", nil, nil)
 

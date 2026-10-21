@@ -4,7 +4,6 @@ import (
 	. "github.com/godot-go/godot-go/pkg/builtin"
 	. "github.com/godot-go/godot-go/pkg/constant"
 	. "github.com/godot-go/godot-go/pkg/core"
-	. "github.com/godot-go/godot-go/pkg/ffi"
 	. "github.com/godot-go/godot-go/pkg/gdclassimpl"
 	"github.com/godot-go/godot-go/pkg/log"
 	"go.uber.org/zap"
@@ -17,7 +16,7 @@ func NewHUDFromOwnerObject(owner *GodotObject) GDClass {
 }
 
 func RegisterClassHUD() {
-	ClassDBRegisterClass(NewHUDFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *HUD) {
+	ClassDBRegisterClass(NewHUDFromOwnerObject, []PropertyDescriptor{}, nil, func(t *HUD) {
 		// virtuals
 		ClassDBBindMethodVirtual(t, "V_HUD_OnStartButtonPressed", "_on_StartButton_pressed", nil, nil)
 		ClassDBBindMethodVirtual(t, "V_HUD_OnMessageTimerTimeout", "_on_MessageTimer_timeout", nil, nil)

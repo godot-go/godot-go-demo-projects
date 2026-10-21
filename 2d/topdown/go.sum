@@ -8,6 +8,8 @@ github.com/godot-go/godot-go v0.3.41 h1:VTlmauVDTv1jGL9mqVqa9MZvCN4yvVqQ/dRXXo7+
 github.com/godot-go/godot-go v0.3.41/go.mod h1:Edgj7w3csni1xYO+75a7VFnsqfVpKOakfvRqXDMIMkE=
 github.com/godot-go/godot-go v0.3.43 h1:a+v4+e1ba29M7/fUA1aC+BZTqVr0ukAiJuxUIMVvXJY=
 github.com/godot-go/godot-go v0.3.43/go.mod h1:Edgj7w3csni1xYO+75a7VFnsqfVpKOakfvRqXDMIMkE=
+github.com/godot-go/godot-go v0.3.65 h1:ZyF4VZ668oBkRVMaapHFoHM2kOop7IOqGFQv6iPBRA8=
+github.com/godot-go/godot-go v0.3.65/go.mod h1:Edgj7w3csni1xYO+75a7VFnsqfVpKOakfvRqXDMIMkE=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

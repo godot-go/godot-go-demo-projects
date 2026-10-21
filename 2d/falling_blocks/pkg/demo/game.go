@@ -13,7 +13,6 @@ import (
 
 	. "github.com/godot-go/godot-go/pkg/builtin"
 	. "github.com/godot-go/godot-go/pkg/core"
-	. "github.com/godot-go/godot-go/pkg/ffi"
 	. "github.com/godot-go/godot-go/pkg/gdclassimpl"
 )
 
@@ -52,7 +51,7 @@ var kindColors = [7][3]float32{
 
 // RegisterClassFallingBlocksGame registers the match root class.
 func RegisterClassFallingBlocksGame() {
-	ClassDBRegisterClass(NewFallingBlocksGameFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *FallingBlocksGame) {
+	ClassDBRegisterClass(NewFallingBlocksGameFromOwnerObject, []PropertyDescriptor{}, nil, func(t *FallingBlocksGame) {
 		ClassDBBindMethodVirtual(t, "V_FallingBlocksGame_Ready", "_ready", nil, nil)
 		ClassDBBindMethodVirtual(t, "V_FallingBlocksGame_Process", "_process", nil, nil)
 		ClassDBBindMethodVirtual(t, "V_FallingBlocksGame_Draw", "_draw", nil, nil)

@@ -8,13 +8,12 @@ import (
 
 	. "github.com/godot-go/godot-go/pkg/builtin"
 	. "github.com/godot-go/godot-go/pkg/core"
-	. "github.com/godot-go/godot-go/pkg/ffi"
 	. "github.com/godot-go/godot-go/pkg/gdclassimpl"
 )
 
 // RegisterClassFallingBlocksLobby registers the lobby root class.
 func RegisterClassFallingBlocksLobby() {
-	ClassDBRegisterClass(NewFallingBlocksLobbyFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *FallingBlocksLobby) {
+	ClassDBRegisterClass(NewFallingBlocksLobbyFromOwnerObject, []PropertyDescriptor{}, nil, func(t *FallingBlocksLobby) {
 		ClassDBBindMethodVirtual(t, "V_FallingBlocksLobby_Ready", "_ready", nil, nil)
 		ClassDBBindMethodVirtual(t, "V_FallingBlocksLobby_Process", "_process", nil, nil)
 		ClassDBBindMethod(t, "OnReady", "on_ready", nil, nil)

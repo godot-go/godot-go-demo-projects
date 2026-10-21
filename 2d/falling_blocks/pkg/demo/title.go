@@ -9,13 +9,12 @@ import (
 
 	. "github.com/godot-go/godot-go/pkg/builtin"
 	. "github.com/godot-go/godot-go/pkg/core"
-	. "github.com/godot-go/godot-go/pkg/ffi"
 	. "github.com/godot-go/godot-go/pkg/gdclassimpl"
 )
 
 // RegisterClassFallingBlocksTitle registers the title-screen root class.
 func RegisterClassFallingBlocksTitle() {
-	ClassDBRegisterClass(NewFallingBlocksTitleFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *FallingBlocksTitle) {
+	ClassDBRegisterClass(NewFallingBlocksTitleFromOwnerObject, []PropertyDescriptor{}, nil, func(t *FallingBlocksTitle) {
 		ClassDBBindMethodVirtual(t, "V_FallingBlocksTitle_Ready", "_ready", nil, nil)
 		ClassDBBindMethodVirtual(t, "V_FallingBlocksTitle_Process", "_process", nil, nil)
 		ClassDBBindMethod(t, "OnHost", "on_host", nil, nil)

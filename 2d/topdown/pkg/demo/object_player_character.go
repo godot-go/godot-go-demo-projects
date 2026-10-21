@@ -22,7 +22,7 @@ func NewPlayerCharacterFromOwnerObject(owner *GodotObject) GDClass {
 }
 
 func RegisterClassPlayerCharacter() {
-	ClassDBRegisterClass(NewPlayerCharacterFromOwnerObject, []GDExtensionPropertyInfo{}, nil, func(t *PlayerCharacter) {
+	ClassDBRegisterClass(NewPlayerCharacterFromOwnerObject, []PropertyDescriptor{}, nil, func(t *PlayerCharacter) {
 		// virtuals
 		ClassDBBindMethodVirtual(t, "V_PlayerCharacter_Input", "_input", []string{"event"}, nil)
 		ClassDBBindMethodVirtual(t, "V_PlayerCharacter_Ready", "_ready", nil, nil)
