@@ -1,9 +1,26 @@
 package demo
 
 import (
+	"fmt"
+
 	. "github.com/godot-go/godot-go/pkg/builtin"
 	. "github.com/godot-go/godot-go/pkg/gdclassimpl"
 )
+
+// bound resolves the wrapper the engine bound for n's runtime class. A node
+// returned by a generated method is typed to that method's declared class
+// (Node), so `node.(Label)` reports false for a Label; resolve first, then
+// assert the result.
+func bound(n Node) Object {
+	if n == nil {
+		panic("bound: node not found")
+	}
+	w, err := ObjectFromInstanceBinding(n.GetGodotObjectOwner())
+	if err != nil {
+		panic(fmt.Sprintf("bound: %v", err))
+	}
+	return w
+}
 
 // session wraps the autoloaded FallingBlocksSession node. godot-go v0.3.40 cannot
 // lazily bind native-owned custom class instances (binding_create is a stub),
@@ -135,31 +152,31 @@ func findNode(from Node, p string) Node {
 func findLabel(from Node, p string) Label {
 	path := nodePath(p)
 	defer path.Destroy()
-	return ObjectCastTo(from.GetNodeOrNull(path), "Label").(Label)
+	return bound(from.GetNodeOrNull(path)).(Label)
 }
 
 func findLineEdit(from Node, p string) LineEdit {
 	path := nodePath(p)
 	defer path.Destroy()
-	return ObjectCastTo(from.GetNodeOrNull(path), "LineEdit").(LineEdit)
+	return bound(from.GetNodeOrNull(path)).(LineEdit)
 }
 
 func findButton(from Node, p string) Button {
 	path := nodePath(p)
 	defer path.Destroy()
-	return ObjectCastTo(from.GetNodeOrNull(path), "Button").(Button)
+	return bound(from.GetNodeOrNull(path)).(Button)
 }
 
 func findPanel(from Node, p string) Panel {
 	path := nodePath(p)
 	defer path.Destroy()
-	return ObjectCastTo(from.GetNodeOrNull(path), "Panel").(Panel)
+	return bound(from.GetNodeOrNull(path)).(Panel)
 }
 
 func findTimer(from Node, p string) Timer {
 	path := nodePath(p)
 	defer path.Destroy()
-	return ObjectCastTo(from.GetNodeOrNull(path), "Timer").(Timer)
+	return bound(from.GetNodeOrNull(path)).(Timer)
 }
 
 func setLabel(l Label, text string) {

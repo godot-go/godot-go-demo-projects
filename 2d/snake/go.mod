@@ -2,7 +2,7 @@ module godot-go-demo-projects/2d/snake
 
 go 1.27.0
 
-require github.com/godot-go/godot-go v0.3.65
+require github.com/godot-go/godot-go v0.3.70
 
 require (
 	github.com/CannibalVox/cgoalloc v1.2.1 // indirect

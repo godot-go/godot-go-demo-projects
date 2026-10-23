@@ -13,13 +13,14 @@ already baked into this package's code.
   Treat peer IDs as opaque `int32`.
 
 ## Gaps found (and the fallback used)
-1. **Custom-class instances cannot be re-fetched via `ObjectCastTo`.**
+1. **Custom-class instances cannot be re-fetched via the instance binding.**
    `GoCallback_GDClassBindingCreate` is a stub returning `nullptr`, so lazily
    binding a Godot-owned custom-class object (e.g. the autoload node) fails
-   and `ObjectCastTo` panics. *Fallback:* call session methods through the
+   and resolving it through `ObjectFromInstanceBinding` returns an error.
+   *Fallback:* call session methods through the
    generic `Object.Call` + Variant path (see `session` wrapper in `ui.go`).
    Builtin classes (Label/Button/Timer...) are unaffected — they have
-   generated binding callbacks.
+   generated binding callbacks, which is what `castNode` relies on.
 2. **`MultiplayerAPI.SetMultiplayerPeer(RefMultiplayerPeer)` segfaults.**
    Generated ptrcall encodes Ref arguments as `&interfaceValue`; the engine
    dereferences it as `Object**` → SIGSEGV. *Fallback:*

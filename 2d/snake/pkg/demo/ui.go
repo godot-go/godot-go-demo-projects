@@ -1,9 +1,26 @@
 package demo
 
 import (
+	"fmt"
+
 	. "github.com/godot-go/godot-go/pkg/builtin"
 	. "github.com/godot-go/godot-go/pkg/gdclassimpl"
 )
+
+// bound resolves the wrapper the engine bound for n's runtime class. A node
+// returned by a generated method is typed to that method's declared class
+// (Node), so `node.(Label)` reports false for a Label; resolve first, then
+// assert the result.
+func bound(n Node) Object {
+	if n == nil {
+		panic("bound: node not found")
+	}
+	w, err := ObjectFromInstanceBinding(n.GetGodotObjectOwner())
+	if err != nil {
+		panic(fmt.Sprintf("bound: %v", err))
+	}
+	return w
+}
 
 func nodePath(p string) NodePath {
 	s := NewStringWithLatin1Chars(p)
@@ -20,13 +37,13 @@ func findNode(from Node, p string) Node {
 func findLabel(from Node, p string) Label {
 	path := nodePath(p)
 	defer path.Destroy()
-	return ObjectCastTo(from.GetNodeOrNull(path), "Label").(Label)
+	return bound(from.GetNodeOrNull(path)).(Label)
 }
 
 func findTimer(from Node, p string) Timer {
 	path := nodePath(p)
 	defer path.Destroy()
-	return ObjectCastTo(from.GetNodeOrNull(path), "Timer").(Timer)
+	return bound(from.GetNodeOrNull(path)).(Timer)
 }
 
 func setLabel(l Label, text string) {
