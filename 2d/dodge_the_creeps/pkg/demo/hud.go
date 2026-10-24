@@ -1,8 +1,6 @@
 package demo
 
 import (
-	"fmt"
-
 	. "github.com/godot-go/godot-go/pkg/builtin"
 	. "github.com/godot-go/godot-go/pkg/constant"
 	. "github.com/godot-go/godot-go/pkg/core"
@@ -55,27 +53,12 @@ func (c *HUD) GetParentClassName() string {
 	return "CanvasLayer"
 }
 
-// bound resolves the wrapper the engine bound for n's runtime class. A node
-// returned by a generated method is typed to that method's declared class
-// (Node), so `node.(Label)` reports false for a Label; resolve first, then
-// assert the result.
-func bound(n Node) Object {
-	if n == nil {
-		panic("bound: node not found")
-	}
-	w, err := ObjectFromInstanceBinding(n.GetGodotObjectOwner())
-	if err != nil {
-		panic(fmt.Sprintf("bound: %v", err))
-	}
-	return w
-}
-
 func (c *HUD) getScoreLabel() Label {
 	gds := NewStringWithLatin1Chars("ScoreLabel")
 	defer gds.Destroy()
 	path := NewNodePathWithString(gds)
 	defer path.Destroy()
-	return bound(c.GetNode(path)).(Label)
+	return c.GetNode(path).(Label)
 }
 
 func (c *HUD) getMessageLabel() Label {
@@ -83,7 +66,7 @@ func (c *HUD) getMessageLabel() Label {
 	defer gds.Destroy()
 	path := NewNodePathWithString(gds)
 	defer path.Destroy()
-	return bound(c.GetNode(path)).(Label)
+	return c.GetNode(path).(Label)
 }
 
 func (c *HUD) getMessageTimer() Timer {
@@ -91,7 +74,7 @@ func (c *HUD) getMessageTimer() Timer {
 	defer gds.Destroy()
 	path := NewNodePathWithString(gds)
 	defer path.Destroy()
-	return bound(c.GetNode(path)).(Timer)
+	return c.GetNode(path).(Timer)
 }
 
 func (c *HUD) getStartButton() Button {
@@ -99,7 +82,7 @@ func (c *HUD) getStartButton() Button {
 	defer gds.Destroy()
 	path := NewNodePathWithString(gds)
 	defer path.Destroy()
-	return bound(c.GetNode(path)).(Button)
+	return c.GetNode(path).(Button)
 }
 
 func (c *HUD) ShowMessage(text Variant) {
