@@ -11,6 +11,10 @@ github.com/godot-go/godot-go v0.3.72 h1:2KamOjMNbIX8Rpz4mUHrMkzKDVdTMeMYILIlH0kC
 github.com/godot-go/godot-go v0.3.72/go.mod h1:Edgj7w3csni1xYO+75a7VFnsqfVpKOakfvRqXDMIMkE=
 github.com/godot-go/godot-go v0.3.73 h1:/tizuzeZ1sznH9gg+BCVjHr/e16zxTxQz3LPMrpvFNM=
 github.com/godot-go/godot-go v0.3.73/go.mod h1:Edgj7w3csni1xYO+75a7VFnsqfVpKOakfvRqXDMIMkE=
+github.com/godot-go/godot-go v0.3.74-0.20261030044906-47a0ee044536 h1:+nH3uM1odxWADHYoM2cSoF6YWoRkaOpWMwyROsXCowI=
+github.com/godot-go/godot-go v0.3.74-0.20261030044906-47a0ee044536/go.mod h1:Edgj7w3csni1xYO+75a7VFnsqfVpKOakfvRqXDMIMkE=
+github.com/godot-go/godot-go v0.3.75 h1:sG4aCqWApqdQUfI/VgRlmYklGZ2K7UWmTWWYpdXFuUM=
+github.com/godot-go/godot-go v0.3.75/go.mod h1:Edgj7w3csni1xYO+75a7VFnsqfVpKOakfvRqXDMIMkE=
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=

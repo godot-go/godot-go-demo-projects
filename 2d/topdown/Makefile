@@ -43,9 +43,10 @@ ci_gen_project_files:
 	$(GODOT) --headless --verbose --path project/ --editor --quit
 
 run:
-	LOG_LEVEL=info \
+	LOG_LEVEL=warn \
+	GOGC=400 \
 	GOTRACEBACK=1 \
-	GODEBUG=sbrk=1,gctrace=1,asyncpreemptoff=1,cgocheck=0,invalidptr=1,clobberfree=1,tracebackancestors=0 \
+	GODEBUG=gctrace=1,cgocheck=0,invalidptr=1,clobberfree=1,tracebackancestors=0 \
 	$(GODOT) --debug  --path project/
 
 editor:

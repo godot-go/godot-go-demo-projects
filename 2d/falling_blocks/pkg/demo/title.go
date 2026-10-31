@@ -38,13 +38,14 @@ func UnregisterClassFallingBlocksTitle() {
 type FallingBlocksTitle struct {
 	ControlImpl
 
-	session    *session
-	nameEdit   LineEdit
-	portEdit   LineEdit
-	addrEdit   LineEdit
-	joinEdit   LineEdit
-	errorLabel Label
-	status     int
+	session     *session
+	nameEdit    LineEdit
+	portEdit    LineEdit
+	addrEdit    LineEdit
+	joinEdit    LineEdit
+	errorLabel  Label
+	status      int
+	pendingSolo bool
 }
 
 func (c *FallingBlocksTitle) GetClassName() string { return "FallingBlocksTitle" }
@@ -69,6 +70,7 @@ func (c *FallingBlocksTitle) V_FallingBlocksTitle_Ready() {
 	// Development automation (headless LAN testing):
 	//   FALLING_BLOCKS_AUTOHOST=<port>              auto-host on ready
 	//   FALLING_BLOCKS_AUTOJOIN=<addr>:<port>       auto-join on ready
+	//   FALLING_BLOCKS_AUTOSOLO                     start a solo match on ready
 	if h := os.Getenv("FALLING_BLOCKS_AUTOHOST"); h != "" {
 		setEdit(c.portEdit, h)
 		c.OnHost()
@@ -79,6 +81,12 @@ func (c *FallingBlocksTitle) V_FallingBlocksTitle_Ready() {
 		setEdit(c.addrEdit, addr)
 		setEdit(c.joinEdit, port)
 		c.OnJoin()
+		return
+	}
+	if os.Getenv("FALLING_BLOCKS_AUTOSOLO") != "" {
+		// Defer one frame: ChangeSceneToFile during _ready races the engine's
+		// own scene setup ("Parent node is busy adding/removing children").
+		c.pendingSolo = true
 	}
 }
 
@@ -96,6 +104,11 @@ func splitHostPort(s string) (string, string) {
 }
 
 func (c *FallingBlocksTitle) V_FallingBlocksTitle_Process() {
+	if c.pendingSolo {
+		c.pendingSolo = false
+		c.OnSolo()
+		return
+	}
 	if c.session == nil || c.status != JoinPending {
 		return
 	}

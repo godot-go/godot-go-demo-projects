@@ -162,6 +162,12 @@ func findTimer(from Node, p string) Timer {
 	return from.GetNodeOrNull(path).(Timer)
 }
 
+func findAudioStreamPlayer(from Node, p string) AudioStreamPlayer {
+	path := nodePath(p)
+	defer path.Destroy()
+	return from.GetNodeOrNull(path).(AudioStreamPlayer)
+}
+
 func setLabel(l Label, text string) {
 	s := NewStringWithUtf8Chars(text)
 	defer s.Destroy()

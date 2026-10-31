@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"godot-go-demo-projects/2d/falling_blocks/pkg/falling_blocks"
@@ -59,6 +60,7 @@ func RegisterClassFallingBlocksGame() {
 		ClassDBBindMethod(t, "OnQuit", "on_quit", nil, nil)
 		ClassDBBindMethod(t, "OnRematch", "on_rematch", nil, nil)
 		ClassDBBindMethod(t, "OnPlayAgain", "on_play_again", nil, nil)
+		ClassDBBindMethod(t, "OnClose", "on_close", nil, nil)
 	})
 }
 
@@ -82,6 +84,7 @@ type FallingBlocksGame struct {
 	g       *fallingblocks.Game
 
 	gravity   Timer
+	music     AudioStreamPlayer
 	scoreLbl  Label
 	linesLbl  Label
 	levelLbl  Label
@@ -107,6 +110,7 @@ type FallingBlocksGame struct {
 	lastLevel    int
 	resultLogged bool
 	rematchFired bool
+	closeAt      time.Time
 }
 
 func (c *FallingBlocksGame) GetClassName() string { return "FallingBlocksGame" }
@@ -119,10 +123,14 @@ func (c *FallingBlocksGame) V_FallingBlocksGame_Ready() {
 	if c.session == nil {
 		return // editor preview
 	}
+	// Stop the soundtrack when the window close is requested, before the
+	// session actually quits (see session.wireQuitHandling / godot#76745).
+	bindSignal(c.GetTree().GetRoot(), c, "close_requested", "on_close")
 	c.selfID = c.session.selfId()
 	c.isHost = c.session.isHostPeer()
 
 	c.gravity = findTimer(c, "Gravity")
+	c.music = findAudioStreamPlayer(c, "Music")
 	c.scoreLbl = findLabel(c, "HUD/ScoreLabel")
 	c.linesLbl = findLabel(c, "HUD/LinesLabel")
 	c.levelLbl = findLabel(c, "HUD/LevelLabel")
@@ -140,6 +148,15 @@ func (c *FallingBlocksGame) V_FallingBlocksGame_Ready() {
 	bindPressed(c.rematchBtn, c, "on_rematch")
 	bindPressed(c.againBtn, c, "on_play_again")
 	bindPressed(findButton(c, "HUD/QuitButton"), c, "on_quit")
+
+	// Development automation: FALLING_BLOCKS_AUTOCLOSE=<seconds> emits the
+	// window's close_requested signal after the delay, so headless runs can
+	// exercise the quit path (see session.wireQuitHandling).
+	if s := os.Getenv("FALLING_BLOCKS_AUTOCLOSE"); s != "" {
+		if secs, err := strconv.ParseFloat(s, 64); err == nil && secs > 0 {
+			c.closeAt = time.Now().Add(time.Duration(secs * float64(time.Second)))
+		}
+	}
 
 	c.startNewGame()
 }
@@ -179,6 +196,12 @@ func (c *FallingBlocksGame) onLock(cleared, garbageSent int) {
 func (c *FallingBlocksGame) V_FallingBlocksGame_Process() {
 	if c.g == nil {
 		return
+	}
+	if !c.closeAt.IsZero() && !time.Now().Before(c.closeAt) {
+		c.closeAt = time.Time{}
+		ssn := NewStringNameWithUtf8Chars("close_requested")
+		defer ssn.Destroy()
+		c.GetTree().GetRoot().EmitSignal(ssn)
 	}
 	c.pollSession()
 	c.handleInput()
@@ -377,8 +400,19 @@ func (c *FallingBlocksGame) OnGravityTimeout() {
 }
 
 func (c *FallingBlocksGame) OnQuit() {
+	if c.music != nil {
+		c.music.Stop()
+	}
 	c.session.leave()
 	changeScene(c, "res://Main.tscn")
+}
+
+// OnClose silences the match music so the audio server can release the
+// playback before the session's deferred quit lands.
+func (c *FallingBlocksGame) OnClose() {
+	if c.music != nil {
+		c.music.Stop()
+	}
 }
 
 func (c *FallingBlocksGame) OnRematch() {

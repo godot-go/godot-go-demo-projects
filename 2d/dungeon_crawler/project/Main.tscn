@@ -1,0 +1,476 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="DungeonCrawler" type="DungeonCrawler"]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TopPanel" type="ColorRect" parent="HUD"]
+offset_left = 8.0
+offset_top = 6.0
+offset_right = 540.0
+offset_bottom = 132.0
+color = Color(0.02, 0.02, 0.04, 0.78)
+
+[node name="TitleLabel" type="Label" parent="HUD"]
+offset_left = 24.0
+offset_top = 12.0
+offset_right = 524.0
+offset_bottom = 38.0
+theme_override_font_sizes/font_size = 17
+text = "Dungeon Crawler"
+
+[node name="HpCaption" type="Label" parent="HUD"]
+offset_left = 24.0
+offset_top = 44.0
+offset_right = 60.0
+offset_bottom = 66.0
+theme_override_font_sizes/font_size = 14
+text = "HP"
+
+[node name="HpBarBg" type="ColorRect" parent="HUD"]
+offset_left = 66.0
+offset_top = 48.0
+offset_right = 266.0
+offset_bottom = 62.0
+color = Color(0.32, 0.12, 0.12, 0.9)
+
+[node name="HpBarFill" type="ColorRect" parent="HUD"]
+offset_left = 66.0
+offset_top = 48.0
+offset_right = 266.0
+offset_bottom = 62.0
+color = Color(0.82, 0.22, 0.22, 1)
+
+[node name="HpText" type="Label" parent="HUD"]
+offset_left = 274.0
+offset_top = 44.0
+offset_right = 400.0
+offset_bottom = 66.0
+theme_override_font_sizes/font_size = 14
+text = ""
+
+[node name="XpCaption" type="Label" parent="HUD"]
+offset_left = 24.0
+offset_top = 70.0
+offset_right = 60.0
+offset_bottom = 92.0
+theme_override_font_sizes/font_size = 14
+text = "XP"
+
+[node name="XpBarBg" type="ColorRect" parent="HUD"]
+offset_left = 66.0
+offset_top = 74.0
+offset_right = 266.0
+offset_bottom = 88.0
+color = Color(0.28, 0.24, 0.1, 0.9)
+
+[node name="XpBarFill" type="ColorRect" parent="HUD"]
+offset_left = 66.0
+offset_top = 74.0
+offset_right = 266.0
+offset_bottom = 88.0
+color = Color(0.9, 0.75, 0.25, 1)
+
+[node name="XpText" type="Label" parent="HUD"]
+offset_left = 274.0
+offset_top = 70.0
+offset_right = 400.0
+offset_bottom = 92.0
+theme_override_font_sizes/font_size = 14
+text = ""
+
+[node name="Pip1" type="ColorRect" parent="HUD"]
+offset_left = 24.0
+offset_top = 98.0
+offset_right = 40.0
+offset_bottom = 112.0
+color = Color(0.95, 0.78, 0.25, 1)
+
+[node name="Pip2" type="ColorRect" parent="HUD"]
+offset_left = 46.0
+offset_top = 98.0
+offset_right = 62.0
+offset_bottom = 112.0
+color = Color(0.18, 0.18, 0.22, 1)
+
+[node name="Pip3" type="ColorRect" parent="HUD"]
+offset_left = 68.0
+offset_top = 98.0
+offset_right = 84.0
+offset_bottom = 112.0
+color = Color(0.18, 0.18, 0.22, 1)
+
+[node name="ActionsLabel" type="Label" parent="HUD"]
+offset_left = 94.0
+offset_top = 96.0
+offset_right = 260.0
+offset_bottom = 114.0
+theme_override_font_sizes/font_size = 13
+text = "Actions"
+
+[node name="HotkeyLabel" type="Label" parent="HUD"]
+offset_left = 24.0
+offset_top = 114.0
+offset_right = 532.0
+offset_bottom = 130.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 1)
+text = ""
+
+[node name="RenownPanel" type="ColorRect" parent="HUD"]
+offset_left = 1054.0
+offset_top = 6.0
+offset_right = 1272.0
+offset_bottom = 40.0
+color = Color(0.02, 0.02, 0.04, 0.78)
+
+[node name="RenownLabel" type="Label" parent="HUD"]
+offset_left = 1062.0
+offset_top = 10.0
+offset_right = 1264.0
+offset_bottom = 36.0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 2
+text = "Renown 0"
+
+[node name="LogPanel" type="ColorRect" parent="HUD"]
+offset_left = 8.0
+offset_top = 588.0
+offset_right = 1272.0
+offset_bottom = 702.0
+color = Color(0.02, 0.02, 0.04, 0.78)
+
+[node name="LogLabel" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 594.0
+offset_right = 1264.0
+offset_bottom = 696.0
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+text = ""
+
+[node name="MenuPanel" type="ColorRect" parent="HUD"]
+visible = false
+offset_left = 390.0
+offset_top = 130.0
+offset_right = 890.0
+offset_bottom = 530.0
+color = Color(0.02, 0.02, 0.04, 0.88)
+
+[node name="BorderOuter" type="ColorRect" parent="HUD/MenuPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+color = Color(0.3, 0.24, 0.09, 0.95)
+
+[node name="BorderInner" type="ColorRect" parent="HUD/MenuPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+color = Color(0.72, 0.58, 0.24, 0.95)
+
+[node name="MenuTitle" type="Label" parent="HUD/MenuPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 14.0
+offset_right = -24.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 21
+theme_override_colors/font_color = Color(0.85, 0.69, 0.28, 1)
+text = ""
+
+[node name="MenuRule" type="ColorRect" parent="HUD/MenuPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = 50.0
+color = Color(0.55, 0.44, 0.18, 0.9)
+
+[node name="PanelLabel" type="Label" parent="HUD"]
+visible = false
+offset_left = 414.0
+offset_top = 188.0
+offset_right = 866.0
+offset_bottom = 514.0
+theme_override_font_sizes/font_size = 19
+autowrap_mode = 3
+text = ""
+
+[node name="CenterPanel" type="ColorRect" parent="HUD"]
+visible = false
+offset_left = 230.0
+offset_top = 210.0
+offset_right = 1050.0
+offset_bottom = 510.0
+color = Color(0.02, 0.02, 0.04, 0.88)
+
+[node name="BorderOuter" type="ColorRect" parent="HUD/CenterPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+color = Color(0.3, 0.24, 0.09, 0.95)
+
+[node name="BorderInner" type="ColorRect" parent="HUD/CenterPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+color = Color(0.72, 0.58, 0.24, 0.95)
+
+[node name="CenterLabel" type="Label" parent="HUD"]
+visible = false
+offset_left = 270.0
+offset_top = 230.0
+offset_right = 1010.0
+offset_bottom = 490.0
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+text = ""
+
+[node name="Scrim" type="ColorRect" parent="HUD"]
+visible = false
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.55)
+
+[node name="HelpPanel" type="ColorRect" parent="HUD"]
+visible = false
+offset_left = 360.0
+offset_top = 150.0
+offset_right = 920.0
+offset_bottom = 570.0
+color = Color(0.02, 0.02, 0.04, 0.92)
+
+[node name="BorderOuter" type="ColorRect" parent="HUD/HelpPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+color = Color(0.3, 0.24, 0.09, 0.95)
+
+[node name="BorderInner" type="ColorRect" parent="HUD/HelpPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+color = Color(0.72, 0.58, 0.24, 0.95)
+
+[node name="HelpTitle" type="Label" parent="HUD/HelpPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 14.0
+offset_right = -24.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.85, 0.69, 0.28, 1)
+text = ""
+
+[node name="HelpRule" type="ColorRect" parent="HUD/HelpPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = 50.0
+color = Color(0.55, 0.44, 0.18, 0.9)
+
+[node name="HelpLabel" type="Label" parent="HUD"]
+visible = false
+offset_left = 384.0
+offset_top = 204.0
+offset_right = 896.0
+offset_bottom = 554.0
+theme_override_font_sizes/font_size = 15
+autowrap_mode = 3
+text = ""
+
+[node name="SheetPanel" type="ColorRect" parent="HUD"]
+visible = false
+offset_left = 300.0
+offset_top = 64.0
+offset_right = 980.0
+offset_bottom = 672.0
+color = Color(0.02, 0.02, 0.04, 0.92)
+
+[node name="BorderOuter" type="ColorRect" parent="HUD/SheetPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+color = Color(0.3, 0.24, 0.09, 0.95)
+
+[node name="BorderInner" type="ColorRect" parent="HUD/SheetPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+color = Color(0.72, 0.58, 0.24, 0.95)
+
+[node name="SheetTitle" type="Label" parent="HUD/SheetPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 14.0
+offset_right = -24.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.85, 0.69, 0.28, 1)
+text = ""
+
+[node name="SheetRule" type="ColorRect" parent="HUD/SheetPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = 50.0
+color = Color(0.55, 0.44, 0.18, 0.9)
+
+[node name="SheetLabel" type="Label" parent="HUD"]
+visible = false
+offset_left = 324.0
+offset_top = 118.0
+offset_right = 956.0
+offset_bottom = 660.0
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+text = ""
+
+[node name="InventoryPanel" type="ColorRect" parent="HUD"]
+visible = false
+offset_left = 340.0
+offset_top = 150.0
+offset_right = 940.0
+offset_bottom = 580.0
+color = Color(0.02, 0.02, 0.04, 0.92)
+
+[node name="BorderOuter" type="ColorRect" parent="HUD/InventoryPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+color = Color(0.3, 0.24, 0.09, 0.95)
+
+[node name="BorderInner" type="ColorRect" parent="HUD/InventoryPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+color = Color(0.72, 0.58, 0.24, 0.95)
+
+[node name="InventoryTitle" type="Label" parent="HUD/InventoryPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 14.0
+offset_right = -24.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.85, 0.69, 0.28, 1)
+text = ""
+
+[node name="InventoryRule" type="ColorRect" parent="HUD/InventoryPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = 50.0
+color = Color(0.55, 0.44, 0.18, 0.9)
+
+[node name="InventoryLabel" type="Label" parent="HUD"]
+visible = false
+offset_left = 364.0
+offset_top = 204.0
+offset_right = 916.0
+offset_bottom = 564.0
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+text = ""
+
+[node name="SpellPanel" type="ColorRect" parent="HUD"]
+visible = false
+offset_left = 340.0
+offset_top = 150.0
+offset_right = 940.0
+offset_bottom = 580.0
+color = Color(0.02, 0.02, 0.04, 0.92)
+
+[node name="BorderOuter" type="ColorRect" parent="HUD/SpellPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+color = Color(0.3, 0.24, 0.09, 0.95)
+
+[node name="BorderInner" type="ColorRect" parent="HUD/SpellPanel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+color = Color(0.72, 0.58, 0.24, 0.95)
+
+[node name="SpellTitle" type="Label" parent="HUD/SpellPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 14.0
+offset_right = -24.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.85, 0.69, 0.28, 1)
+text = ""
+
+[node name="SpellRule" type="ColorRect" parent="HUD/SpellPanel"]
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = 50.0
+color = Color(0.55, 0.44, 0.18, 0.9)
+
+[node name="SpellLabel" type="Label" parent="HUD"]
+visible = false
+offset_left = 364.0
+offset_top = 204.0
+offset_right = 916.0
+offset_bottom = 564.0
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+text = ""

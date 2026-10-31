@@ -134,6 +134,10 @@ func RegisterClassFallingBlocksSession() {
 		ClassDBBindMethod(t, "OnNetConnected", "on_net_connected", nil, nil)
 		ClassDBBindMethod(t, "OnNetConnectionFailed", "on_net_connection_failed", nil, nil)
 		ClassDBBindMethod(t, "OnServerDisconnected", "on_server_disconnected", nil, nil)
+
+		// Window close-request sink (see wireQuitHandling)
+		ClassDBBindMethod(t, "OnCloseRequested", "on_close_requested", nil, nil)
+		ClassDBBindMethod(t, "OnQuitTimer", "on_quit_timer", nil, nil)
 	})
 }
 
@@ -164,6 +168,9 @@ type FallingBlocksSession struct {
 
 	peer         RefENetMultiplayerPeer
 	joinDeadline time.Time
+
+	quitScheduled bool
+	quitTimer     RefSceneTreeTimer
 }
 
 func (c *FallingBlocksSession) GetClassName() string { return "FallingBlocksSession" }
@@ -177,6 +184,37 @@ func (c *FallingBlocksSession) V_FallingBlocksSession_Ready() {
 	c.roster = Roster{Phase: PhaseTitle, Winner: -1}
 	c.configureRpc()
 	c.connectNetSignals()
+	c.wireQuitHandling()
+}
+
+// wireQuitHandling takes over window-close so the process can never quit while
+// an AudioStreamPlayer is still playing: godotengine/godot#76745 leaves the
+// audio server holding playback references when shutdown races a stream fade,
+// leaking 4 instances + 2 resources at exit. On close_requested we stop all
+// sound (each scene connects its own handler) and quit ~0.1s later so the
+// server's deferred deletion runs first.
+func (c *FallingBlocksSession) wireQuitHandling() {
+	tree := c.GetTree()
+	tree.SetAutoAcceptQuit(false)
+	bindSignal(tree.GetRoot(), c, "close_requested", "on_close_requested")
+}
+
+func (c *FallingBlocksSession) OnCloseRequested() {
+	log.Info("falling-blocks-demo: close requested, scheduling quit")
+	if c.quitScheduled {
+		return
+	}
+	c.quitScheduled = true
+	c.quitTimer = c.GetTree().CreateTimer(0.1, true, false, false)
+	bindSignal(c.quitTimer.Ptr(), c, "timeout", "on_quit_timer")
+}
+
+func (c *FallingBlocksSession) OnQuitTimer() {
+	c.quitScheduled = false
+	if c.quitTimer.IsValid() {
+		c.quitTimer.Unref()
+	}
+	c.GetTree().Quit(0)
 }
 
 func (c *FallingBlocksSession) V_FallingBlocksSession_ExitTree() {
